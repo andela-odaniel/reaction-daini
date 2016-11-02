@@ -48,7 +48,6 @@ Template.searchModal.onCreated(function () {
     const searchCollection = this.state.get("searchCollection") || "products";
     const searchQuery = this.state.get("searchQuery");
     const priceRange = this.state.get('priceRange');
-    console.log(priceRange, "at autorun");
     const facets = this.state.get("facets") || [];
     const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange);
 
@@ -146,6 +145,7 @@ Template.searchModal.helpers({
     return [
       {value: "null", label: "Filter by price"},
       {value: "all", label: "All prices"},
+      {value: "below-10", label: "below - $10"},
       {value: "10-55", label: "$10 - $55"},
       {value: "55-100", label: "$55 - $100"},
       {value: "100-500", label: "$100 - $500"},

@@ -31,6 +31,7 @@
   "updatedAt": {
     "$date": "2014-06-01T12:17:13.949-0700"
   },
+  "brand": "Gucci",
   "vendor": "Example Manufacturer"
 }, {
   "_id": "6qiqPwBkeJdtdQc4G",

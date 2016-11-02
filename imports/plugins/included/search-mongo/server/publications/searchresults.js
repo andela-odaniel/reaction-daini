@@ -9,6 +9,14 @@ const supportedCollections = ["products", "orders", "accounts"];
 function checkPriceRange(priceRange, shopId, searchTerm) {
   let findTerm = {};
   switch(priceRange) {
+    case "below-10":
+      findTerm = {
+        "price.min":{ $gt: 0.00},
+        "price.max":{ $lt: 10.00},
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+      break;
     case "10-55":
       findTerm = {
         "price.min":{ $gt: 10.00},
