@@ -96,7 +96,7 @@ describe("Search results", function () {
     it("should produce no results for phony title match", function () {
       const searchTerm = "xxxxx";
       const results = getResults.products(searchTerm);
-      const numResults = results.count();
+      const numResults = results.count();``
       expect(numResults).to.equal(0);
     });
 

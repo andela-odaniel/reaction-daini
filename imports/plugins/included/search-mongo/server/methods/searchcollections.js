@@ -74,6 +74,7 @@ export function buildProductSearchRecord(productId) {
         productRecord[field] = product[field];
       }
     }
+    console.log(productRecord);
     const productSearchRecord = ProductSearch.insert(productRecord);
     ensureProductSearchIndex();
     return productSearchRecord;

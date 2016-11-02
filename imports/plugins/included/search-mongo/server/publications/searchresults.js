@@ -6,12 +6,71 @@ import { ProductSearch, OrderSearch, AccountSearch } from "/lib/collections";
 
 const supportedCollections = ["products", "orders", "accounts"];
 
-function getProductFindTerm(searchTerm, searchTags, userId) {
+function checkPriceRange(priceRange, shopId, searchTerm) {
+  let findTerm = {};
+  switch(priceRange) {
+    case "10-55":
+      findTerm = {
+        "price.min":{ $gt: 10.00},
+        "price.max":{ $lt: 55.00},
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+      break;
+    case "55-100":
+      findTerm = {
+        "price.min":{ $gt: 55.00},
+        "price.max":{ $lt: 100.00},
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+      break;
+    case "55-100":
+      findTerm = {
+        "price.min":{ $gt: 55.00},
+        "price.max":{ $lt: 100.00},
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+      break;
+    case "100-500":
+      findTerm = {
+        "price.min":{ $gt: 100.00},
+        "price.max":{ $lt: 500.00},
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+      break;
+    case "500-1000":
+      findTerm = {
+        "price.min":{ $gt: 500.00},
+        "price.max":{ $lt: 1000.00},
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+      break;
+    case "1000-above":
+      findTerm = {
+        "price.min":{ $gt: 1000.00},
+        "price.max":{ $lt: 10000000.00},
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+      break;
+    default:
+      findTerm = {
+        shopId: shopId,
+        $text: {$search: searchTerm}
+      };
+  }
+
+  return findTerm;
+}
+
+function getProductFindTerm(searchTerm, searchTags,priceRange, userId) {
+  console.log(priceRange);
   const shopId = Reaction.getShopId();
-  const findTerm = {
-    shopId: shopId,
-    $text: {$search: searchTerm}
-  };
+  const findTerm = checkPriceRange(priceRange, shopId, searchTerm);
   if (searchTags.length) {
     findTerm.hashtags = {$all: searchTags};
   }
@@ -23,9 +82,9 @@ function getProductFindTerm(searchTerm, searchTags, userId) {
 
 export const getResults = {};
 
-getResults.products = function (searchTerm, facets, maxResults, userId) {
+getResults.products = function (searchTerm, facets,priceRange, maxResults, userId) {
   const searchTags = facets || [];
-  const findTerm = getProductFindTerm(searchTerm, searchTags, userId);
+  const findTerm = getProductFindTerm(searchTerm, searchTags,priceRange, userId);
   const productResults = ProductSearch.find(findTerm,
     {
       fields: {
@@ -34,7 +93,7 @@ getResults.products = function (searchTerm, facets, maxResults, userId) {
         hashtags: 1,
         description: 1,
         handle: 1,
-        price: 1
+        price:1
       },
       sort: {score: {$meta: "textScore"}},
       limit: maxResults
@@ -116,16 +175,17 @@ getResults.accounts = function (searchTerm, facets, maxResults, userId) {
   return accountResults;
 };
 
-Meteor.publish("SearchResults", function (collection, searchTerm, facets, maxResults = 99) {
+Meteor.publish("SearchResults", function (collection, searchTerm, facets, priceRange = "", maxResults = 99) {
   check(collection, String);
   check(collection, Match.Where((coll) => {
     return _.includes(supportedCollections, coll);
   }));
+  check(priceRange, Match.OneOf(String, undefined, null));
   check(searchTerm, Match.Optional(String));
   check(facets, Match.OneOf(Array, undefined));
   Logger.debug(`Returning search results on ${collection}. SearchTerm: |${searchTerm}|. Facets: |${facets}|.`);
   if (!searchTerm) {
     return this.ready();
   }
-  return getResults[collection](searchTerm, facets, maxResults, this.userId);
+  return getResults[collection](searchTerm, facets,priceRange, maxResults, this.userId);
 });

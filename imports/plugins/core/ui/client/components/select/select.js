@@ -1,5 +1,5 @@
 import { templateClassName } from "/imports/plugins/core/ui/client/helpers/helpers";
-
+import { Session } from 'meteor/session';
 /**
  * Select - onCreated
  */
@@ -12,9 +12,10 @@ Template.select.onCreated(function () {
  */
 Template.select.events({
   "change select, change input"(event, template) {
-    if (template.data.onSelect) {
-      template.data.onSelect(event.target.value, event);
-    }
+    Session.set('pickedOption', event.target.value);
+    // if (template.data.onSelect) {
+    //  return template.data.onSelect(event.target.value, event);
+    // }
   }
 });
 
