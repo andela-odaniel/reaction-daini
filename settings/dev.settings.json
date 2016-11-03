@@ -1,0 +1,11 @@
+{
+  "ROOT_URL": "",
+  "MAIL_URL": "",
+  "reaction": {
+    "REACTION_USER": "Admin",
+    "REACTION_AUTH": "rabbit",
+    "REACTION_EMAIL": "admin@localhost"
+  },
+  "isDebug": "info",
+  "public": {}
+}
