@@ -1,50 +1,52 @@
-#Grab the latest alpine image
-# FROM reactioncommerce/base:latest
-FROM ubuntu:14.04
+FROM debian:jessie
+MAINTAINER Reaction Commerce <admin@reactioncommerce.com>
 
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-RUN echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+ENV NODE_VERSION "4.6.0"
 
-RUN apt-get update && apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-RUN curl https://install.meteor.com/ | sh
-RUN apt-get install -y \
-build-essential \
-nodejs \
-git \
-mongodb-org \
-python \
-python-dev
+# Install MongoDB
+ENV INSTALL_MONGO "true"
+ENV MONGO_VERSION "3.2.10"
+ENV MONGO_MAJOR "3.2"
 
+# Install PhantomJS
+ENV INSTALL_PHANTOMJS "true"
+ENV PHANTOM_VERSION "2.1.1"
 
-# Install python and pip
-# RUN apk add --update python py-pip bash
-# ADD ./webapp/requirements.txt /tmp/requirements.txt
+# build directories
+ENV APP_SOURCE_DIR "/opt/reaction/src"
+ENV APP_BUNDLE_DIR "/opt/reaction/dist"
+ENV BUILD_SCRIPTS_DIR "/opt/reaction/build_scripts"
 
-# Install dependencies
-# RUN npm install -g reaction-cli
-# RUN git clone https://github.com/andela/project-daini.git /opt/webapp/
-COPY . /opt/webapp/
-RUN cd /opt/webapp/ && npm install
+# Add entrypoint and build scripts
+COPY .reaction/docker/scripts $BUILD_SCRIPTS_DIR
+RUN chmod -R +x $BUILD_SCRIPTS_DIR
 
-# Add our code
-# ADD ./webapp /opt/webapp/
-WORKDIR /opt/webapp
+# install base dependencies and clean up
+RUN cd $BUILD_SCRIPTS_DIR && \
+		bash $BUILD_SCRIPTS_DIR/install-deps.sh && \
+		bash $BUILD_SCRIPTS_DIR/install-node.sh && \
+		bash $BUILD_SCRIPTS_DIR/install-mongo.sh && \
+		bash $BUILD_SCRIPTS_DIR/install-phantom.sh && \
+		bash $BUILD_SCRIPTS_DIR/post-install-cleanup.sh
 
-# Expose is NOT supported by Heroku
-# EXPOSE 5000
+# copy the app to the container
+ONBUILD COPY . $APP_SOURCE_DIR
 
-# Run the image as a non-root user
-# RUN adduser -D myuser
-# USER myuser
+# install Meteor, build app, clean up
+ONBUILD RUN cd $APP_SOURCE_DIR && \
+            bash $BUILD_SCRIPTS_DIR/install-meteor.sh && \
+            bash $BUILD_SCRIPTS_DIR/build-meteor.sh && \
+            bash $BUILD_SCRIPTS_DIR/post-build-cleanup.sh
 
-RUN cp /usr/local/bin/meteor /opt/webapp/.meteor/
-# Run the app.  CMD is required to run on Heroku
-# $PORT is set by Heroku
-# CMD gunicorn --bind 0.0.0.0:$PORT wsgi
-CMD meteor
+# set the default port that Node will listen on
+ENV PORT 80
+EXPOSE 80
 
+RUN useradd -m myuser
+USER myuser
 
-# Default environment variables
-ENV ROOT_URL "http://localhost"
-ENV MONGO_URL "mongodb://127.0.0.1:27017/reaction"
+WORKDIR $APP_BUNDLE_DIR/bundle
+
+# start the app
+ENTRYPOINT ./entrypoint.sh
+CMD []
