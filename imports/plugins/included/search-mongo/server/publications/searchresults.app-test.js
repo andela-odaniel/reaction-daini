@@ -22,6 +22,7 @@ export function createProduct(isVisible = true, title) {
     description: faker.lorem.paragraph(),
     type: "simple",
     vendor: faker.company.companyName(),
+    brand:"Gucci",
     price: {
       range: "24.99",
       min: 24.99,
@@ -109,6 +110,52 @@ describe("Search results", function () {
       const numResults = results.count();
       expect(numResults).to.equal(0);
     });
+
+
+
+    //Product filtering test
+
+    //Price filter
+    it("should produce results when price filter of range $10-above", function () {
+      const searchTerm = "Product Search Test";
+      const filter = "10-55";
+      const result = getResults.products(searchTerm,[],filter);
+      expect(result).to.be.above(0);
+    });
+    
+    it("should produce all results if price filter is set to all price", function () {
+      const searchTerm = "Product Search Test";
+      const filter = "all"
+      const result = getResults.products(searchTerm,[], filter);
+      expect(result).to.be.above(0);
+    })
+
+    it("should return result without price filter", function () {
+      const searchTerm = "Product Search Test";
+      const result = getResults.products(searchTerm);
+      expect(result).to.be.above(0);
+    })
+
+    //Brand filter
+    it("should produce results when brand filter is Gucci", function () {
+      const searchTerm = "Product Search Test";
+      const filter = "Gucci"
+      const result = getResults.products(searchTerm,[],filter);
+      expect(result).to.be.above(0);
+    });
+
+    it("should produce results when brand filter is set to all brands", function () {
+      const searchTerm = "Product Search Test";
+      const filter = "&all&";
+      const result = getResult.products(searchTerm,[], filter);
+      expect(result).to.be.above(0);
+    });
+
+    it("should return result without brand filter", function () {
+      const searchTerm = "Product Search Test";
+      const result = getResults.products(searchTerm);
+      expect(result).to.be.above(0);
+    })
   });
 });
 

@@ -75,13 +75,19 @@ function checkPriceRange(priceRange, shopId, searchTerm) {
   return findTerm;
 }
 
-function getProductFindTerm(searchTerm, searchTags,priceRange, userId) {
-  console.log(priceRange);
+function getProductFindTerm(searchTerm, searchTags,priceRange,brandPicked, userId) {
   const shopId = Reaction.getShopId();
+  console.log(brandPicked,"it go here");
   const findTerm = checkPriceRange(priceRange, shopId, searchTerm);
   if (searchTags.length) {
     findTerm.hashtags = {$all: searchTags};
   }
+  if(typeof brandPicked === "string") {
+      
+      if(brandPicked.length > 1) {
+        findTerm.brand = brandPicked;
+      }
+    }
   if (!Roles.userIsInRole(userId, ["admin", "owner"], shopId)) {
     findTerm.isVisible = true;
   }
@@ -90,9 +96,9 @@ function getProductFindTerm(searchTerm, searchTags,priceRange, userId) {
 
 export const getResults = {};
 
-getResults.products = function (searchTerm, facets,priceRange, maxResults, userId) {
+getResults.products = function (searchTerm, facets,priceRange,brandPicked, maxResults, userId) {
   const searchTags = facets || [];
-  const findTerm = getProductFindTerm(searchTerm, searchTags,priceRange, userId);
+  const findTerm = getProductFindTerm(searchTerm, searchTags,priceRange,brandPicked, userId);
   const productResults = ProductSearch.find(findTerm,
     {
       fields: {
@@ -101,7 +107,8 @@ getResults.products = function (searchTerm, facets,priceRange, maxResults, userI
         hashtags: 1,
         description: 1,
         handle: 1,
-        price:1
+        price:1,
+        brand:1
       },
       sort: {score: {$meta: "textScore"}},
       limit: maxResults
@@ -183,17 +190,21 @@ getResults.accounts = function (searchTerm, facets, maxResults, userId) {
   return accountResults;
 };
 
-Meteor.publish("SearchResults", function (collection, searchTerm, facets, priceRange = "", maxResults = 99) {
+Meteor.publish("SearchResults", function (collection, searchTerm, facets, priceRange = "", brandPicked = "", maxResults = 99) {
   check(collection, String);
   check(collection, Match.Where((coll) => {
     return _.includes(supportedCollections, coll);
   }));
+  check(brandPicked, Match.OneOf(String, undefined, null));
   check(priceRange, Match.OneOf(String, undefined, null));
   check(searchTerm, Match.Optional(String));
   check(facets, Match.OneOf(Array, undefined));
   Logger.debug(`Returning search results on ${collection}. SearchTerm: |${searchTerm}|. Facets: |${facets}|.`);
+  if(brandPicked === "&all&" || brandPicked === "&null&") {
+    brandPicked = null;
+  }
   if (!searchTerm) {
     return this.ready();
   }
-  return getResults[collection](searchTerm, facets,priceRange, maxResults, this.userId);
+  return getResults[collection](searchTerm, facets,priceRange,brandPicked, maxResults, this.userId);
 });

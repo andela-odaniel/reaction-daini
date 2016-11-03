@@ -43,14 +43,16 @@ Template.searchModal.onCreated(function () {
     }
   });
 
-
+  let brands = [];
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
     const searchQuery = this.state.get("searchQuery");
     const priceRange = this.state.get('priceRange');
+    const brandPicked = this.state.get('brandPicked');
+    console.log(brandPicked, "found you");
     const facets = this.state.get("facets") || [];
-    const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange);
-
+    const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange, brandPicked);
+    
     if (sub.ready()) {
       /*
        * Product Search
@@ -63,6 +65,7 @@ Template.searchModal.onCreated(function () {
 
         const hashtags = [];
         for (const product of productResults) {
+          console.log(product);
           if (product.hashtags) {
             for (const hashtag of product.hashtags) {
               if (!_.includes(hashtags, hashtag)) {
@@ -70,11 +73,20 @@ Template.searchModal.onCreated(function () {
               }
             }
           }
+          if(product.brand) {
+            if(!_.includes(brands, product.brand)) {
+              console.log(product.brand);
+              brands.push(product.brand);
+            }
+          }
+            
         }
+        console.log(brands, "this are the brands");
         const tagResults = Tags.find({
           _id: { $in: hashtags }
         }).fetch();
         this.state.set("tagSearchResults", tagResults);
+        this.state.set("brandSearchResult", brands);
 
         // TODO: Do we need this?
         this.state.set("accountSearchResults", "");
@@ -154,11 +166,27 @@ Template.searchModal.helpers({
     ];
   },
    brands() {
-    return [
-      {value: "one", label: "Filter by brand"},
-      {value: "two", label: "Highest - Lowest"},
-      {value: "three", label: "Lowest - Highest"}
-    ];
+     const instance = Template.instance();
+     const brands = instance.state.get("brandSearchResult");
+     if(brands) {
+       var result = [{
+            value: "&null&",
+            label: "Filter by brand"
+          },
+          {
+            value:"&all&",
+            label:"All brands"
+          }
+       ];
+       for (let brand = 0; brand < brands.length; brand++) {
+         result.push({
+           value: brands[brand],
+           label: brands[brand]
+         });
+       }
+     }
+     
+    return result;
   },
    bestSellers() {
     return [
@@ -170,9 +198,15 @@ Template.searchModal.helpers({
   priceSelect() {
     const instance = Template.instance();
     const priceRange = Session.get('pickedOption');
-    console.log(priceRange);
     if(priceRange) {
       instance.state.set("priceRange", priceRange);
+    }
+  },
+  brandSelect() {
+    const instance = Template.instance();
+    const brandPicked = Session.get('pickedBrand');
+    if(typeof brandPicked === "string") {
+      instance.state.set("brandPicked", brandPicked);
     }
   },
   tagSearchResults() {
@@ -193,7 +227,6 @@ Template.searchModal.events({
   // on type, reload Reaction.SaerchResults
   "keyup input": (event, templateInstance) => {
     event.preventDefault();
-    console.log(templateInstance);
     const searchQuery = templateInstance.find("#search-input").value;
     templateInstance.state.set("searchQuery", searchQuery);
     $(".search-modal-header:not(.active-search)").addClass(".active-search");

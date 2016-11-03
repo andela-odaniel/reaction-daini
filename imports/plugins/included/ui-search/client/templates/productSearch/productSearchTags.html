@@ -10,18 +10,18 @@
       {{/each}}
     </div>
     {{else}}
-    <div style="margin-top:60px;">
+    <div style="margin-top:65px;">
     </div>
     {{/if}}
     <div class="row" style="float:right;margin-top:-40px;margin-left:-100px;position:relative;width:500px">
       <span class="col-md-4 col-sm-4 col-xs-4" style="position:relative">
-        {{> select options=priceOptions onSelect=handleSelect}}
+        {{> select options=priceOptions typeOf="priceOption"}}
       </span>
       <span class="col-md-4 col-sm-4 col-xs-4" style="position:relative;">
-        {{> select options=brands }}
+        {{> select options=brands typeOf="brandOption"}}
       </span>
       <span class="col-md-4 col-sm-4 col-xs-4" style="position:absolute;">
-        {{> select options=bestSellers }}
+        {{> select options=bestSellers}}
       </span>
       <!--<span style="max-width:60px;position:absolute">
         {{> select options=brandOptions}}
