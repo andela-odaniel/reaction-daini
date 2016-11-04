@@ -9,7 +9,7 @@ import { transformations } from "./transformations";
 
 
 const requiredFields = {};
-requiredFields.products = ["_id", "hashtags", "shopId", "handle", "price", "isVisible", "vendor", "brand"];
+requiredFields.products = ["_id", "hashtags", "shopId", "handle", "price","numSold", "isVisible", "vendor", "brand"];
 requiredFields.orders = ["_id", "shopId", "shippingName", "shippingPhone", "billingName", "userEmails",
   "shippingAddress","billingAddress", "shippingStatus", "billingStatus", "orderTotal", "orderDate"];
 requiredFields.accounts = ["_id", "shopId", "emails", "profile"];

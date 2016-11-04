@@ -19,6 +19,10 @@ Template.select.events({
     if(template.data.typeOf === "brandOption") {
       Session.set('pickedBrand', event.target.value);
     }
+    if(template.data.typeOf === "bestSeller") {
+      console.log(event.target.value);
+      Session.set('sellerPicked', event.target.value);
+    }
     
     // if (template.data.onSelect) {
     //  return template.data.onSelect(event.target.value, event);

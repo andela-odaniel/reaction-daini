@@ -49,9 +49,10 @@ Template.searchModal.onCreated(function () {
     const searchQuery = this.state.get("searchQuery");
     const priceRange = this.state.get('priceRange');
     const brandPicked = this.state.get('brandPicked');
-    console.log(brandPicked, "found you");
+    const bestSellers = this.state.get("bestSellers");
+    console.log(bestSellers);
     const facets = this.state.get("facets") || [];
-    const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange, brandPicked);
+    const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange, brandPicked, bestSellers);
     
     if (sub.ready()) {
       /*
@@ -81,7 +82,6 @@ Template.searchModal.onCreated(function () {
           }
             
         }
-        console.log(brands, "this are the brands");
         const tagResults = Tags.find({
           _id: { $in: hashtags }
         }).fetch();
@@ -191,8 +191,8 @@ Template.searchModal.helpers({
    bestSellers() {
     return [
       {value: "one", label: "Filter by sellers"},
-      {value: "two", label: "Highest - Lowest"},
-      {value: "three", label: "Lowest - Highest"}
+      {value: "high-low", label: "Highest - Lowest"},
+      {value: "low-high", label: "Lowest - Highest"}
     ];
   },
   priceSelect() {
@@ -207,6 +207,14 @@ Template.searchModal.helpers({
     const brandPicked = Session.get('pickedBrand');
     if(typeof brandPicked === "string") {
       instance.state.set("brandPicked", brandPicked);
+    }
+  },
+  bestSellerSelect() {
+    const instance = Template.instance();
+    const sellerPicked = Session.get('sellerPicked');
+    console.log(sellerPicked, "selle picked");
+    if(typeof sellerPicked === "string") {
+      instance.state.set("bestSellers", sellerPicked);
     }
   },
   tagSearchResults() {

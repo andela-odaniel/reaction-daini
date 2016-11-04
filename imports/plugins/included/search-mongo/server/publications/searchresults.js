@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { Meteor } from "meteor/meteor";
 import { check, Match } from "meteor/check";
+import { EJSON } from "meteor/ejson";
 import { Reaction, Logger } from "/server/api";
 import { ProductSearch, OrderSearch, AccountSearch } from "/lib/collections";
 
@@ -75,9 +76,24 @@ function checkPriceRange(priceRange, shopId, searchTerm) {
   return findTerm;
 }
 
-function getProductFindTerm(searchTerm, searchTags,priceRange,brandPicked, userId) {
+function getBestSellerSort(bestSellers) {
+  let bestSellerSort;
+  switch(bestSellers) {
+    case "high-low":
+      bestSellerSort = {numSold:-1};
+      break;
+    case "low-high":
+      bestSellerSort = {numSold:1};
+      break;
+    default:
+      bestSellerSort = {};
+  }
+
+  return bestSellerSort;
+}
+
+function getProductFindTerm(searchTerm, searchTags,priceRange,brandPicked,bestSellers, userId) {
   const shopId = Reaction.getShopId();
-  console.log(brandPicked,"it go here");
   const findTerm = checkPriceRange(priceRange, shopId, searchTerm);
   if (searchTags.length) {
     findTerm.hashtags = {$all: searchTags};
@@ -96,24 +112,70 @@ function getProductFindTerm(searchTerm, searchTags,priceRange,brandPicked, userI
 
 export const getResults = {};
 
-getResults.products = function (searchTerm, facets,priceRange,brandPicked, maxResults, userId) {
+getResults.products = function (searchTerm, facets,priceRange,brandPicked,bestSellers, maxResults, userId) {
   const searchTags = facets || [];
-  const findTerm = getProductFindTerm(searchTerm, searchTags,priceRange,brandPicked, userId);
-  const productResults = ProductSearch.find(findTerm,
-    {
-      fields: {
-        score: {$meta: "textScore"},
-        title: 1,
-        hashtags: 1,
-        description: 1,
-        handle: 1,
-        price:1,
-        brand:1
-      },
-      sort: {score: {$meta: "textScore"}},
-      limit: maxResults
-    }
-  );
+  const findTerm = getProductFindTerm(searchTerm, searchTags,priceRange,brandPicked,bestSellers, userId);
+  const bestSellerSort = getBestSellerSort(bestSellers);
+  var productResults;
+  console.log(bestSellers);                   
+  switch(bestSellers) {
+    case "high-low":
+      productResults = ProductSearch.find(findTerm,
+        {sort:{numSold: -1}},
+        {
+          fields: {
+            score: {$meta: "textScore"},
+            title: 1,
+            hashtags: 1,
+            description: 1,
+            handle: 1,
+            price:1,
+            brand:1,
+            numSold:1
+          },
+          sort: {score: {$meta: "textScore"}},
+          limit: maxResults
+        }
+      );
+    break;
+    case "low-high":
+      productResults = ProductSearch.find(findTerm,
+        {sort:{numSold: 1}},
+        {
+          fields: {
+            score: {$meta: "textScore"},
+            title: 1,
+            hashtags: 1,
+            description: 1,
+            handle: 1,
+            price:1,
+            brand:1,
+            numSold:1
+          },
+          sort: {score: {$meta: "textScore"}},
+          limit: maxResults
+        }
+      );
+    break;
+    default:
+      productResults = ProductSearch.find(findTerm,
+        {
+          fields: {
+            score: {$meta: "textScore"},
+            title: 1,
+            hashtags: 1,
+            description: 1,
+            handle: 1,
+            price:1,
+            brand:1,
+            numSold:1
+          },
+          sort: {score: {$meta: "textScore"}},
+          limit: maxResults
+        }
+      );
+  };
+  console.log(productResults);
   return productResults;
 };
 
@@ -190,12 +252,13 @@ getResults.accounts = function (searchTerm, facets, maxResults, userId) {
   return accountResults;
 };
 
-Meteor.publish("SearchResults", function (collection, searchTerm, facets, priceRange = "", brandPicked = "", maxResults = 99) {
+Meteor.publish("SearchResults", function (collection, searchTerm, facets, priceRange = "", brandPicked = "",bestSellers = "", maxResults = 99) {
   check(collection, String);
   check(collection, Match.Where((coll) => {
     return _.includes(supportedCollections, coll);
   }));
   check(brandPicked, Match.OneOf(String, undefined, null));
+  check(bestSellers, Match.OneOf(String, undefined, null));
   check(priceRange, Match.OneOf(String, undefined, null));
   check(searchTerm, Match.Optional(String));
   check(facets, Match.OneOf(Array, undefined));
@@ -206,5 +269,5 @@ Meteor.publish("SearchResults", function (collection, searchTerm, facets, priceR
   if (!searchTerm) {
     return this.ready();
   }
-  return getResults[collection](searchTerm, facets,priceRange,brandPicked, maxResults, this.userId);
+  return getResults[collection](searchTerm, facets,priceRange,brandPicked,bestSellers, maxResults, this.userId);
 });
