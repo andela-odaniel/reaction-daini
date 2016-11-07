@@ -49,24 +49,30 @@ Template.searchModal.onCreated(function () {
     const searchQuery = this.state.get("searchQuery");
     const priceRange = this.state.get('priceRange');
     const brandPicked = this.state.get('brandPicked');
-    const bestSellers = this.state.get("bestSellers");
-    console.log(bestSellers);
     const facets = this.state.get("facets") || [];
-    const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange, brandPicked, bestSellers);
+    const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange, brandPicked);
     
     if (sub.ready()) {
       /*
        * Product Search
        */
       if (searchCollection === "products") {
-        const productResults = ProductSearch.find().fetch();
+        const rangeBestSeller = this.state.get('bestSellers');
+        let sortBest = '';
+        switch(rangeBestSeller) {
+          case 'high-low':
+            sortBest = -1;
+            break;
+          case 'low-high':
+            sortBest = 1;
+        }
+        const productResults = ProductSearch.find({}, {sort:{numSold:sortBest}}).fetch();
         const productResultsCount = productResults.length;
         this.state.set("productSearchResults", productResults);
         this.state.set("productSearchCount", productResultsCount);
 
         const hashtags = [];
         for (const product of productResults) {
-          console.log(product);
           if (product.hashtags) {
             for (const hashtag of product.hashtags) {
               if (!_.includes(hashtags, hashtag)) {
@@ -76,7 +82,6 @@ Template.searchModal.onCreated(function () {
           }
           if(product.brand) {
             if(!_.includes(brands, product.brand)) {
-              console.log(product.brand);
               brands.push(product.brand);
             }
           }
@@ -190,7 +195,7 @@ Template.searchModal.helpers({
   },
    bestSellers() {
     return [
-      {value: "one", label: "Filter by sellers"},
+      {value: "one", label: "Filter by Best seller"},
       {value: "high-low", label: "Highest - Lowest"},
       {value: "low-high", label: "Lowest - Highest"}
     ];
@@ -212,7 +217,6 @@ Template.searchModal.helpers({
   bestSellerSelect() {
     const instance = Template.instance();
     const sellerPicked = Session.get('sellerPicked');
-    console.log(sellerPicked, "selle picked");
     if(typeof sellerPicked === "string") {
       instance.state.set("bestSellers", sellerPicked);
     }
