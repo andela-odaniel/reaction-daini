@@ -14,14 +14,21 @@ Template.coreOrderWorkflow.helpers({
    * @return {Object} An object witht the order id and fulfillment
    */
   orderFulfillmentData(orderId, fulfillment) {
-    let currentOrder = Orders.findOne(orderId);
     return {
-      cartId: currentOrder.cartId,
-      email: currentOrder.email,
       orderId: orderId,
       fulfillment: fulfillment
     };
   },
+
+  /**
+   * baseOrder
+   * @todo may be unnecessary
+   * @return {Object} contents of Template.currentData(), non-reactive
+   */
+  baseOrder() {
+    return Template.currentData();
+  },
+
   /**
    * order
    * @return {Object|Boolean} An order or false
@@ -44,19 +51,27 @@ Template.coreOrderWorkflow.helpers({
   },
 
   /**
-   * orderStatus
-   * This function checks the current status of the order workflow
+   * isCompleted
+   * @todo may need to be refactored
+   * @return {String|Boolean} order completion status or false
    */
-  orderStatus(expectedStatus) {
-    return this.workflow.status.substr(this.workflow.status.indexOf("/") + 1) === expectedStatus;
+  isCompleted() {
+    const order = Template.parentData(1);
+    if (this.status === true) {
+      return order.workflow.status;
+    }
+    return false;
   },
 
   /**
-   * loadTemplates
-   * This function loads the template suite for the curent workflow
+   * isPending
+   * @todo may need to be refactored
+   * @return {String|Boolean} status or false
    */
-  loadTemplate() {
-    const filter = Reaction.Router.getQueryParam("filter");
-    return filter === "cancelled" && this.label === "Shipment Tracking" ? false : true;
+  isPending() {
+    if (this.status === this.template) {
+      return this.status;
+    }
+    return false;
   }
 });

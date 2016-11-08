@@ -141,7 +141,6 @@ export default function () {
     pageTitle: faker.lorem.sentence(),
     description: faker.lorem.paragraph(),
     type: "simple",
-    brand:faker.company.companyName(),
     vendor: faker.company.companyName(),
     price: priceRange,
     isLowQuantity: false,

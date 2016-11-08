@@ -10,39 +10,32 @@
               <a
                 aria-controls="{{label}}"
                 aria-expanded="true"
+                data-i18n="orderWorkflow.fulfillment"
                 data-parent="#core-order-workflow-accordion"
                 data-toggle="collapse"
                 href="#{{template}}-panel"
                 role="button">Fulfillment {{fulfillmentNumber @index}}</a>
 
+              {{!--
               <span class="pull-right">
-                {{#if orderStatus "new"}}
-                  <i class="fa fa-plus-circle 2x"></i>
+                {{#if isCompleted}}
+                <i class="fa fa-check-circle-o 2x"></i>
+                {{else}}
+                 <i class="fa fa-exclamation 2x"></i>
                 {{/if}}
-                {{#if orderStatus "cancelled"}}
-                  <i class="fa fa-ban 2x"></i>
-                {{/if}}
-                {{#if orderStatus "processing"}}
-                  <i class="fa fa-hourglass-half 2x"></i>
-                {{/if}}
-                {{#if orderStatus "completed"}}
-                  <i class="fa fa-check-circle-o 2x"></i>
-                {{/if}}
-              </span>
+              </span>--}}
             </div>
           </div>
 
           {{#each reactionTemplate workflow="coreOrderShipmentWorkflow"}}
-          {{#if loadTemplate}}
             <div aria-labelledby="{{template}}" class="panel panel-default" id="{{template}}-panel" role="tabpanel">
               <div class="panel-heading">
                 <h3 class="panel-title" data-i18n="orderWorkflow.{{toCamelCase label}}"><strong>{{label}}</strong></h3>
               </div>
               <div class="panel-body">
-                  {{> Template.dynamic template=template data=(orderFulfillmentData ../_id shipment) }}
+                {{> Template.dynamic template=template data=(orderFulfillmentData ../_id shipment) }}
               </div>
             </div>
-            {{/if}}
           {{/each}}
         </div>
       {{/each}}

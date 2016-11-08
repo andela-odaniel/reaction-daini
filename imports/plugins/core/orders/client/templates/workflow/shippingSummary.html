@@ -23,12 +23,6 @@
       <span>{{tracking}}</span> -
       <span class="badge badge-{{shipmentStatus.status}}">{{shipmentStatus.label}}</span>
     </div>
-    
-    {{#unless isCancelledOrder}}
-      <div class="col-xs-12" style="margin-top:1em">
-        <button class="btn btn-sm btn-warning cancel-order">Cancel order</button>
-      </div>
-    {{/unless}}
 
   </div>
 </template>

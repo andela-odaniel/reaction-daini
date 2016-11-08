@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { Meteor } from "meteor/meteor";
-import { Reaction } from "/client/api";
 import { Tracker } from "meteor/tracker";
 import { Template } from "meteor/templating";
 import { i18next } from "/client/api";
@@ -48,15 +47,6 @@ Template.coreOrderShippingSummary.onRendered(function () {
 Template.coreOrderShippingSummary.events({
   "click .btn": function () {
     Meteor.call("workflow/pushOrderWorkflow", "coreOrderWorkflow", "coreOrderCreated", this);
-  },
-  "click .cancel-order": function () {
-    Meteor.call("orders/cancel", this.cartId, this.email, function (err) {
-      if (err) {
-        alert("sorry your cannot cancel customer order at this moment");
-      } else {
-        alert("Customer order cancelled successfully");
-      }
-    });
   }
 });
 
@@ -114,14 +104,5 @@ Template.coreOrderShippingSummary.helpers({
       status: "info",
       label: i18next.t("orderShipping.notShipped")
     };
-  },
-
-  /**
-   * loadTemplates
-   * This function loads the template suite for the curent workflow
-   */
-  isCancelledOrder() {
-    const filter = Reaction.Router.getQueryParam("filter");
-    return filter === "cancelled" || filter === "completed";
   }
 });
