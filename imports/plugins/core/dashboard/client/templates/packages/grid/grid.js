@@ -184,4 +184,4 @@ Template.registerHelper('groupIndex', function(i){
 Template.registerHelper('introMsg', function(msg, i){
   console.log(msg, i);
   return msg[i];
-})
+});

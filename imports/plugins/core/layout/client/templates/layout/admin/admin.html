@@ -16,18 +16,6 @@
       {{> Template.dynamic template=dashboardHeader}}
       <!-- end dashboardHeader -->
 
-      <!--<div id="intro-banner" class="row">
-        <div class="col-sm-12" style="text-align:center; background-color: #25b315">
-            <span style="font-size: 1.9em">
-                Welcome Admin! Would you like to take a tour?
-            </span>
-          <p>
-            <a href="javascript:void(0);" onclick="javascript:introJs().start();">Yes, Please</a>
-            <a href="javascript:void(0);" onclick="javascript:$(#intro-banner).hide();">No, thanks</a>
-          </p>
-        </div>
-      </div>-->
-
       <!-- begin template region -->
       {{> Template.dynamic template=template}}
       <!-- end template region -->
@@ -62,7 +50,7 @@
 
   <div class="admin-controls-menu">
 
-    <nav class="admin-controls-quicklinks">
+    <nav class="admin-controls-quicklinks" data-step="1" data-intro="Click here to manage your store">
       {{!-- Reaction.Apps provides=shortcut --}}
       {{#each props in shortcutButtons}}
         {{#if isSeperator props}}
@@ -73,7 +61,6 @@
           {{> button props}}
         {{/if}}
       {{/each}}
-      <!--<a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Tour</a>-->
     </nav>
 
     <nav class="admin-controls-actions" >

@@ -3,8 +3,8 @@
   "MAIL_URL": "",
   "reaction": {
     "REACTION_USER": "Admin",
-    "REACTION_AUTH": "fortune",
-    "REACTION_EMAIL": "ad@min.com"
+    "REACTION_AUTH": "password",
+    "REACTION_EMAIL": "admin@localhost"
   },
   "isDebug": "info",
   "public": {}
