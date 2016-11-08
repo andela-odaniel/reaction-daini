@@ -7,10 +7,11 @@
       {{> tagNav tagNavProps}}
     </div>
     
-    <div class="search">{{> React IconButtonComponent}}</div>
-    <div class="languages hidden-xs">{{> i18nChooser}}</div>
-    <div class="accounts">{{> accounts tpl="loginDropdown"}}</div>
-    <div class="cart">{{> cartIcon}}</div>
+    <div><a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Tour</a></div>
+    <div class="search" data-step="7" data-intro="Search for products">{{> React IconButtonComponent}}</div>
+    <div class="languages hidden-xs" data-step="8" data-intro="Select a language that suits you best">{{> i18nChooser}}</div>
+    <div class="accounts" data-step="9" data-intro="This is your account drop down menu you can fill out your profile or signout from here">{{> accounts tpl="loginDropdown"}}</div>
+    <div class="cart" data-step="4" data-intro="This is your cart you can always click here to see your ordered products">{{> cartIcon}}</div>
     <div class="cart-alert">{{> cartPanel}}</div>
   </div>
 </template>

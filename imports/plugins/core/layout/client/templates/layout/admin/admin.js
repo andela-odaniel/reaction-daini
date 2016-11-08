@@ -25,16 +25,24 @@ Template.coreAdminLayout.helpers({
 
     const items = [];
 
+    const introMessages = [
+      'this is your dashboard. You can click here to visit your dashboard',
+      'this is the orders page. You can click here to view your orders',
+      'this is your accounts page. You can click here to view your account information',
+      ]
+
     if (_.isArray(shortcuts)) {
-      for (const shortcut of shortcuts) {
+      for (let i = 0; i < shortcuts.length; i++) {
         items.push({
           type: "link",
-          href: Reaction.Router.pathFor(shortcut.name),
-          className: Reaction.Router.isActiveClassName(shortcut.name),
-          icon: shortcut.icon,
-          tooltip: shortcut.label || "",
-          i18nKeyTooltip: shortcut.i18nKeyLabel,
-          tooltipPosition: "left middle"
+          href: Reaction.Router.pathFor(shortcuts[i].name),
+          className: Reaction.Router.isActiveClassName(shortcuts[i].name),
+          icon: shortcuts[i].icon,
+          tooltip: shortcuts[i].label || "",
+          i18nKeyTooltip: shortcuts[i].i18nKeyLabel,
+          tooltipPosition: "left middle",
+          "data-step": i+1,
+          "data-intro": introMessages[i],
         });
       }
     }
