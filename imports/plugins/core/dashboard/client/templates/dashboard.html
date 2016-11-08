@@ -14,11 +14,21 @@
 <template name="dashboardHeader">
     <div class="nav nav-dashboard">
       <div class="nav-dashboard-heading">
-        <h3 class="nav-dashboard-title">
+        <div class="nav-dashboard-title h3">
           {{#with registry}}
-           <span>{{i18n i18nKeyTitle label}}</span>
+           <span>
+             
+             {{i18n i18nKeyTitle label}}
+
+             <em class="col-md-offset-12 small" style="margin-right:120%;">
+              <a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Dashboard Tour</a>
+            </em>
+           </span>
           {{/with}}
-        </h3>
+        </div>
+        <!--<span class="small pull-right">
+            
+            </span>-->
       </div>
       <div class="nav-dashboard-controls">
         <!-- dashboardHeaderControls -->
