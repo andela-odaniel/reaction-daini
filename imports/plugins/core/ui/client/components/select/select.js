@@ -1,5 +1,5 @@
 import { templateClassName } from "/imports/plugins/core/ui/client/helpers/helpers";
-import { Session } from 'meteor/session';
+
 /**
  * Select - onCreated
  */
@@ -11,26 +11,9 @@ Template.select.onCreated(function () {
  * Select - events
  */
 Template.select.events({
-  "change select"(event, template) {
-    if(template.data.typeOf === "priceOption") {
-      console.log(event.target.value);
-      Session.set('pickedOption', event.target.value);
-    }
-    if(template.data.typeOf === "brandOption") {
-      Session.set('pickedBrand', event.target.value);
-    }
-    if(template.data.typeOf === "bestSeller") {
-      console.log(event.target.value);
-      Session.set('sellerPicked', event.target.value);
-    }
-    
-    // if (template.data.onSelect) {
-    //  return template.data.onSelect(event.target.value, event);
-    // }
-  },
-  "change input"(event, template) {
+  "change select, change input"(event, template) {
     if (template.data.onSelect) {
-     return template.data.onSelect(event.target.value, event);
+      template.data.onSelect(event.target.value, event);
     }
   }
 });

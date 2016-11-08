@@ -138,20 +138,6 @@ class ProductDetail extends Component {
               <div className="vendor">
                 <ProductField
                   editable={this.editable}
-                  fieldName="brand"
-                  fieldTitle="Brand"
-                  onProductFieldChange={this.props.onProductFieldChange}
-                  product={this.product}
-                  textFieldProps={{
-                    i18nKeyPlaceholder: "productDetailEdit.brand",
-                    placeholder: "Brand"
-                  }}
-                />
-              </div>
-
-              <div className="vendor">
-                <ProductField
-                  editable={this.editable}
                   fieldName="vendor"
                   fieldTitle="Vendor"
                   onProductFieldChange={this.props.onProductFieldChange}

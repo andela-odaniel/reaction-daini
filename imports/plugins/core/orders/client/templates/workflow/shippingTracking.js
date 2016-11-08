@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Meteor } from "meteor/meteor";
 import { Tracker } from "meteor/tracker";
 import { Template } from "meteor/templating";
-import { Products, Orders } from "/lib/collections";
+import { Orders } from "/lib/collections";
 
 Template.coreOrderShippingTracking.onCreated(() => {
   const template = Template.instance();
@@ -31,18 +31,8 @@ Template.coreOrderShippingTracking.onCreated(() => {
 Template.coreOrderShippingTracking.events({
   "click [data-event-action=shipmentShipped]": function () {
     const template = Template.instance();
-    let productIds = [];
-    let items = template.order.items;
-
-    for(let i=0;i<items.length;i++) {
-      if(!_.includes(productIds, items[i].productId)) {
-        productIds.push(items[i].productId);
-      }
-    }
-    // Meteor.call("orders/shipmentShipped", template.order, template.order.shipping[0]);
-    productIds.map((id) => {
-      Meteor.call("products/updateSoldField", id);
-    });
+    Meteor.call("orders/shipmentShipped", template.order, template.order.shipping[0]);
+    // Meteor.call("workflow/pushOrderShipmentWorkflow", "coreOrderShipmentWorkflow", "orderShipped", this._id);
   },
 
   "click [data-event-action=resendNotification]": function () {

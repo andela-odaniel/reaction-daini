@@ -850,31 +850,5 @@ Meteor.methods({
       throw new Meteor.Error(
         "Attempt to refund transaction failed", result.error);
     }
-  },
-
-  /**
-   * orders/delete
-   * This method is called when an order is to be deleted
-   * @return {null}
-   */
-  "orders/cancel": function (cartId, email) {
-    check(cartId, String);
-    check(email, String);
-    this.unblock();
-
-    // coreOrderWorkflow/cancelled
-    // workflow.status
-    // workflow.workflow.push
-    // @TODO send a mail to the user telling them their order has been cancelled.
-    return Orders.update({
-      cartId: cartId
-    }, {
-      $set: {
-        "workflow.status": "coreOrderWorkflow/cancelled"
-      },
-      $push: {
-        "workflow.workflow": "coreOrderWorkflow/cancelled"
-      }
-    });
   }
 });
