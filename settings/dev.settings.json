@@ -2,7 +2,7 @@
   "ROOT_URL": "",
   "MAIL_URL": "",
   "reaction": {
-    "REACTION_USER": "admin",
+    "REACTION_USER": "Admin",
     "REACTION_AUTH": "password",
     "REACTION_EMAIL": "admin@localhost"
   },
