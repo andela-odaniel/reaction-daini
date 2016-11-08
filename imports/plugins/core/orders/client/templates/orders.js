@@ -13,6 +13,9 @@ const orderFilters = [{
 }, {
   name: "completed",
   label: "Completed"
+}, {
+  name: "cancelled",
+  label: "Cancelled"
 }];
 
 const OrderHelper =  {
@@ -59,9 +62,9 @@ const OrderHelper =  {
         };
         break;
 
-      case "canceled":
+      case "cancelled":
         query = {
-          "workflow.status": "canceled"
+          "workflow.status": "coreOrderWorkflow/cancelled"
         };
         break;
 
@@ -120,6 +123,9 @@ Template.orders.onCreated(function () {
  * orders helpers
  */
 Template.orders.helpers({
+  hasPermission(collectionName) {
+    return Reaction.hasPermission(collectionName);
+  },
   itemProps(order) {
     return {
       order,
