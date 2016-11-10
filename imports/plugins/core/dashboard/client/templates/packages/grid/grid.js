@@ -104,31 +104,7 @@ Template.packagesGrid.onCreated(function () {
  */
 Template.packagesGrid.helpers({
   groups() {
-    const group = Template.instance().state.get("groups");
-
-    // const items = [];
-
-    // const introMessages = [
-    //   "this is your core settings",
-    //   "this is your utility settings",
-    //   "this is your appearance settings",
-    //   "this is your connect settings",
-    //   "this is your payment method settings",
-    //   ]
-
-    // for(let i = 0; i < group.length; i++) {
-    //   console.log(group[i]);
-    // }
-
-    // if (_.isArray(group)) {
-    //   for (let i = 0; i < group.length; i++) {
-    //     items.push({
-    //       "data-step": i+1,
-    //       "data-intro": introMessages[i],
-    //     });
-    //   }
-    // }
-    return group;
+    return Template.instance().state.get("groups");
   },
 
   messages() {
@@ -145,7 +121,6 @@ Template.packagesGrid.helpers({
 
   appsInGroup(groupName) {
     const group = Template.instance().state.get("appsByGroup") || {};
-    // console.log(group);
     return group[groupName] || false;
   },
 
@@ -161,7 +136,6 @@ Template.packagesGridGroup.helpers({
   pkgPermissions,
 
   packageProps(app) {
-    // console.log(app.template);
     return {
       package: app,
       enablePackage(reactionPackage, value) {
