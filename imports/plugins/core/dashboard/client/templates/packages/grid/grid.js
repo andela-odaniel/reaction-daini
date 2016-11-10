@@ -104,18 +104,16 @@ Template.packagesGrid.onCreated(function () {
  */
 Template.packagesGrid.helpers({
   groups() {
-
     const group = Template.instance().state.get("groups");
 
-    console.log(group);
     // const items = [];
 
     // const introMessages = [
-    //   'this is your core settings',
-    //   'this is your utility settings',
-    //   'this is your appearance settings',
-    //   'this is your connect settings',
-    //   'this is your payment method settings',
+    //   "this is your core settings",
+    //   "this is your utility settings",
+    //   "this is your appearance settings",
+    //   "this is your connect settings",
+    //   "this is your payment method settings",
     //   ]
 
     // for(let i = 0; i < group.length; i++) {
@@ -133,16 +131,16 @@ Template.packagesGrid.helpers({
     return group;
   },
 
-  messages(){
+  messages() {
     const introMessages = [
-      'This is your core settings',
-      'Below is your utilities settings',
-      'Followed next when you scroll is your appearance settings',
-      'Scroll next is your connect settings',
-      'And finally your payment method settings',
-      ];
+      "This is your core settings",
+      "Below is your utilities settings",
+      "Followed next when you scroll is your appearance settings",
+      "Scroll next is your connect settings",
+      "And finally your payment method settings"
+    ];
 
-      return introMessages;
+    return introMessages;
   },
 
   appsInGroup(groupName) {
@@ -177,11 +175,10 @@ Template.packagesGridGroup.helpers({
   }
 });
 
-Template.registerHelper('groupIndex', function(i){
+Template.registerHelper("groupIndex", function (i) {
   return i + 14;
 });
 
-Template.registerHelper('introMsg', function(msg, i){
-  console.log(msg, i);
+Template.registerHelper("introMsg", function (msg, i) {
   return msg[i];
 });
