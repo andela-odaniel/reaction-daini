@@ -8,9 +8,15 @@ Template.dashboardHeader.helpers({
     // just some handle little helpers for default package i18nKey/i18nLabel
     const route = Reaction.Router.getRouteName();
     const registry = Reaction.getRegistryForCurrentRoute() || {};
+
     if (registry && route) {
       return Reaction.translateRegistry(registry);
     }
+  },
+
+  labelIs (label) {
+    const registry = Reaction.getRegistryForCurrentRoute() || {};
+    return registry.label === label;
   }
 });
 
