@@ -54,6 +54,8 @@ Template.productGrid.onRendered(function () {
 
  const myintro = introJs();
 
+
+console.log(Accounts.takenTour)
   
   
  if(Meteor.user().emails.length > 0 && !currentUser.takenTour){
