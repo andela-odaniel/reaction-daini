@@ -17,8 +17,10 @@ Meteor.methods({
         check(title, String);
         check(body, String);
 
-        const url = 'page/' + name.replace(' ', '-').toLowerCase();
+        // Generate url using the name of the page
+        const url = 'pages/' + name.replace(' ', '-').toLowerCase();
         
+        // Hey yo! Insert the data right now!
         StaticPages.insert({
             pageName: name,
             pageRoute: url,
