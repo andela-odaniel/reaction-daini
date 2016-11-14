@@ -1,5 +1,23 @@
 
 <template name="CoreNavigationBar">
+<style>
+  .notify-icon {
+    left: 10px !important;
+    position: relative !important;
+  }
+  .dropdown-menu {
+    padding:0px !important;
+  }
+  .notify {
+    top:-8px !important;
+    background-color: red !important;
+  }
+  .notify-drop {
+    min-width:280px !important;
+  }
+</style>
+
+
   <div class="rui navbar">
     <div class="showmenu">{{> button icon="bars" onClick=onMenuButtonClick}}</div>
     {{> coreNavigationBrand}}
@@ -7,8 +25,16 @@
       {{> tagNav tagNavProps}}
     </div>
     
-    <div><a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Tour</a></div>
-    <div class="search" data-step="7" data-intro="Search for products">{{> React IconButtonComponent}}</div>
+    <div class="search"><a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Tour</a></div>
+    <div class="search searchIcon" data-step="7" data-intro="Search for products">{{> React SearchButtonComponent}}</div>
+    {{#if hasPermission permissions}}
+    <div class="dropdown">
+      <div class="search dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-step="7" data-intro="Search for products">{{> React NotificationButtonComponent}}</div>
+      <div class="notify-drop dropdown-menu">
+        {{> React NotificationDropdownComponent}}
+      </div>
+    </div>
+    {{/if}}
     <div class="languages hidden-xs" data-step="8" data-intro="Select a language that suits you best">{{> i18nChooser}}</div>
     <div class="accounts" data-step="9" data-intro="This is your account drop down menu you can fill out your profile or signout from here">{{> accounts tpl="loginDropdown"}}</div>
     <div class="cart" data-step="4" data-intro="This is your cart you can always click here to see your ordered products">{{> cartIcon}}</div>

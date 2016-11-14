@@ -11,6 +11,8 @@ class FlatButton extends Component {
     const {
       icon,
       onIcon,
+      badge,
+      notifyIcon,
       ...otherProps
     } = this.props;
 
@@ -39,6 +41,8 @@ class FlatButton extends Component {
       <Button
         className={buttonClassName}
         icon={iconClassName}
+        badge={badge}
+        notifyIcon={notifyIcon}
         onIcon={onIconClassName}
         {...otherProps}
       />

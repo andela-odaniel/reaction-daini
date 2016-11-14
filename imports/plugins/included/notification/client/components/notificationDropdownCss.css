@@ -1,0 +1,11 @@
+.notify-toolbar {
+    height:30px;
+}
+
+.notify-mark-all {
+    float:right;
+}
+.notify-bar {
+    padding:0px;
+    height:auto;
+}

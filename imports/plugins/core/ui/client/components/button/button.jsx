@@ -52,6 +52,11 @@ class Button extends Component {
   }
 
   renderNormalStateIcon() {
+    if(this.props.icon && this.props.notifyIcon) {
+      return (
+        <Icon icon={this.props.icon} notifyIcon={this.props.notifyIcon} />
+      );
+    }
     if (this.props.icon) {
       return (
         <Icon icon={this.props.icon} />
@@ -128,8 +133,8 @@ class Button extends Component {
     const {
       // Destructure these vars as they aren't valid as attributes on the HTML element button
       iconAfter, label, active, className, status, i18nKeyTitle, i18nKeyLabel, i18nKeyTooltip, // eslint-disable-line no-unused-vars
-      tooltip, icon, toggle, onIcon, primary, toggleOn, eventAction, // eslint-disable-line no-unused-vars
-      toggleOnLabel, i18nKeyToggleOnLabel, tagName, onClick, // eslint-disable-line no-unused-vars
+      tooltip, badge, icon, toggle, onIcon, primary, toggleOn, eventAction, // eslint-disable-line no-unused-vars
+      toggleOnLabel,notifyIcon, i18nKeyToggleOnLabel, tagName, onClick, // eslint-disable-line no-unused-vars
 
       // Get the rest of the properties and put them in attrs
       // these will most likely be HTML attributes
@@ -168,6 +173,13 @@ class Button extends Component {
         children: this.props.children
       });
     }
+    if(badge) {
+      return React.createElement(tagName, buttonProps, 
+        <span>
+        {buttonChildren} <span className="badge notify">{badge}</span>
+        </span>
+      );
+    };
 
     // Button with tooltip gets some special treatment
     if (tooltip) {
@@ -200,7 +212,9 @@ Button.propTypes = {
   label: PropTypes.string,
   onClick: PropTypes.func,
   onIcon: PropTypes.string,
+  notifyIcon:PropTypes.bool,
   primary: PropTypes.bool,
+  badge: PropTypes.string,
   status: PropTypes.string,
   tagName: PropTypes.string,
   title: PropTypes.string,
