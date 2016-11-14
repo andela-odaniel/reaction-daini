@@ -5,8 +5,8 @@
             <h1>Manage Pages</h1>
             <hr>
             <ul>
-                {{#each createdPages}}
-                    {{ pageName }}
+                {{#each page in displayPages}}
+                    {{ page.pageName }} <br>
                 {{/each}}
             </ul>
             
@@ -36,7 +36,6 @@
                     CKEDITOR.replace("body");
                 </script>
                 <br>
-                <!--<input type="submit" class="btn btn-primary" value="Create Page"/>-->
                 
                 <div class="form-group"> 
                     <div class="pull-left">

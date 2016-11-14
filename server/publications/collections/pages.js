@@ -2,7 +2,7 @@ import { StaticPages } from "/lib/collections";
 import { Reaction } from "/server/api";
 
 // StaticPages Publication
-Meteor.publish("StaticPages", function () {
+Meteor.publish("Pages", function () {
 
     console.log('testing...');
     if (this.userId === null) {

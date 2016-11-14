@@ -3,7 +3,7 @@ import { Reaction } from "/server/api";
 Reaction.registerPackage({
   label: "Pages",
   name: "static-pages",
-  icon: "fa fa-th",
+  icon: "fa fa-copy",
   autoEnable: true,
   settings: {
     name: "Pages"
@@ -15,7 +15,7 @@ Reaction.registerPackage({
     name: "Static Pages",
     label: "Pages",
     description: "Create and manage static pages",
-    icon: "fa fa-th",
+    icon: "fa fa-copy",
     priority: 1,
     container: "core",
     template: "staticPage"

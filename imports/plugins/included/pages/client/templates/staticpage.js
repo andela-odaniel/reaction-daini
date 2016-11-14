@@ -1,5 +1,11 @@
 import { Reaction } from "/client/api";
-import { StaticPages } from "/lib/collections";
+import { StaticPages, Accounts } from "/lib/collections";
+
+
+Template.staticPage.onCreated(function () {
+    // Subscription to Pages publication 
+    this.subscribe('Pages');
+});
 
 
 Template.staticPage.events({
@@ -23,3 +29,11 @@ Template.staticPage.events({
 
     }
 });
+
+
+Template.staticPage.helpers({
+    displayPages() {
+        // Displays pages fetched from db
+        return StaticPages.find();
+    }
+})
