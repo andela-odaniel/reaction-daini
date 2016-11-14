@@ -5,8 +5,8 @@
             <h1>Manage Pages</h1>
             <hr>
             <ul>
-                {{#each page in displayPages}}
-                    {{ page.pageName }} <br>
+                {{#each displayPages}}
+                    {{ > displayPageName }} <br>
                 {{/each}}
             </ul>
             
@@ -50,6 +50,12 @@
  
 </template>
 
-<template name="displayPage">
+<template name="displayPageName">
+    <li>
+        <span > {{ pageName }}</span>
 
+        <button class="btn btn-info">edit</button>
+        <button class="btn btn-danger">Delete</button>
+
+    </li>
 </template>
