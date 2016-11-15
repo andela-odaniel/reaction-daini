@@ -82,4 +82,4 @@ Template.staticPage.helpers({
         // Displays pages fetched from db
         return StaticPages.find();
     }
-})
+});

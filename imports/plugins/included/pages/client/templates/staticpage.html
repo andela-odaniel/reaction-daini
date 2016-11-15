@@ -56,8 +56,19 @@
 
         <div class="pull-right">
             <button class="btn btn-info edit">Edit</button>
+            <a class="btn btn-success preview" href="{{ pageRoute }}">Preview</a>
             <button class="btn btn-danger delete">Delete</button>
         </div>
 
     </li>
+</template>
+
+
+<template name="pagesPreview">
+
+    <h3>{{{pageTitle}}}</h3> 
+    <div>
+        {{{ pageBody }}}
+    </div>
+
 </template>
