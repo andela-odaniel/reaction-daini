@@ -86,7 +86,6 @@ Template.packagesGrid.onCreated(function () {
     this.state.set("apps", apps);
     this.state.set("appsByGroup", groupedApps);
     this.state.set("groups", Object.keys(groupedApps));
-    console.log(groupedApps);
   });
 });
 
