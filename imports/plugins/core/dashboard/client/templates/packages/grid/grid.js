@@ -94,8 +94,12 @@ Template.packagesGrid.onCreated(function () {
  */
 Template.packagesGrid.helpers({
   groups() {
+<<<<<<< HEAD
     const group = Template.instance().state.get("groups");
     return group;
+=======
+    return Template.instance().state.get("groups");
+>>>>>>> develop
   },
 
   messages() {
@@ -127,7 +131,6 @@ Template.packagesGridGroup.helpers({
   pkgPermissions,
 
   packageProps(app) {
-    // console.log(app.template);
     return {
       package: app,
       enablePackage(reactionPackage, value) {
@@ -145,6 +148,10 @@ Template.registerHelper("groupIndex", function (i) {
   return i + 14;
 });
 
+<<<<<<< HEAD
 Template.registerHelper("introMsg", function (msg, i) {
+=======
+Template.registerHelper('introMsg', function(msg, i){
+>>>>>>> develop
   return msg[i];
 });
