@@ -20,9 +20,9 @@ Template.staticPage.events({
         const body = target.body.value;
 
 
-        const btn = document.getElementById('btn-update').innerHTML;
+        const btnAction = document.getElementById('btn-update').innerHTML;
         
-        if(btn === 'Create Page'){
+        if(btnAction === 'Create Page'){
 
             // Calls the freaking insert method with the form values as params
             Meteor.call('pages.insert', name, title, body);
