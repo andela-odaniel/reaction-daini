@@ -20,16 +20,16 @@
              
              {{i18n i18nKeyTitle label}}
 
-             <em class="col-md-offset-12 small" style="margin-right:120%;">
-              <a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Dashboard Tour</a>
-            </em>
+             {{#if labelIs "Core"}}
+              <em class="small">
+                <a href="javascript:void(0);" onclick="javascript:introJs().start();" style="color:blue">Take Dashboard Tour</a>
+              </em>
+            {{/if}}
            </span>
           {{/with}}
         </div>
-        <!--<span class="small pull-right">
-            
-            </span>-->
       </div>
+      
       <div class="nav-dashboard-controls">
         <!-- dashboardHeaderControls -->
         {{> Template.dynamic template=dashboardHeaderControls}}

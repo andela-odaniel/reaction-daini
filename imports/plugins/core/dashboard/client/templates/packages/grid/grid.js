@@ -3,16 +3,6 @@ import { Meteor } from "meteor/meteor";
 import { Reaction, i18next } from "/client/api";
 
 function pkgPermissions(pkg) {
-  // if (Reaction.hasPermission("dashboard")) {
-  //   // route specific permissions
-  //   if (pkg.name) {
-  //     return Reaction.hasPermission(pkg.name);
-  //   }
-  //   // name is a global group role for packages
-  //   if (pkg.template) {
-  //     return Reaction.hasPermission(pkg.template);
-  //   }
-  // }
   return Reaction.hasPermission(pkg.name);
 }
 
@@ -104,26 +94,24 @@ Template.packagesGrid.onCreated(function () {
  */
 Template.packagesGrid.helpers({
   groups() {
-
     const group = Template.instance().state.get("groups");
     return group;
   },
 
-  messages(){
+  messages() {
     const introMessages = [
-      'This is your core settings',
-      'Below is your utilities settings',
-      'Followed next when you scroll is your appearance settings',
-      'Scroll next is your connect settings',
-      'And finally your payment method settings',
-      ];
+      "This is your core settings",
+      "Below is your utilities settings",
+      "Followed next when you scroll is your appearance settings",
+      "Scroll next is your connect settings",
+      "And finally your payment method settings"
+    ];
 
-      return introMessages;
+    return introMessages;
   },
 
   appsInGroup(groupName) {
     const group = Template.instance().state.get("appsByGroup") || {};
-    console.log(group);
     return group[groupName] || false;
   },
 
@@ -139,7 +127,6 @@ Template.packagesGridGroup.helpers({
   pkgPermissions,
 
   packageProps(app) {
-    // console.log(app);
     return {
       package: app,
       enablePackage(reactionPackage, value) {
@@ -153,7 +140,7 @@ Template.packagesGridGroup.helpers({
   }
 });
 
-Template.registerHelper('groupIndex', function(i){
+Template.registerHelper("groupIndex", function (i) {
   return i + 14;
 });
 
