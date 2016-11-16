@@ -96,4 +96,3 @@ practicalmeteor:sinon
 # Custom Packages
 nimble:restivus
 xcv58:collection-api
-mongo@=1.1.14

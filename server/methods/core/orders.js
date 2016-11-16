@@ -853,7 +853,7 @@ Meteor.methods({
   },
 
   /**
-   * orders/delete
+   * orders/cancel
    * This method is called when an order is to be deleted
    * @return {null}
    */

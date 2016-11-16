@@ -113,7 +113,11 @@ mobile-status-bar@1.0.12
 modules@0.7.7
 modules-runtime@0.7.7
 momentjs:moment@2.15.1
+<<<<<<< HEAD
+mongo@1.1.13
+=======
 mongo@1.1.14
+>>>>>>> develop
 mongo-id@1.0.6
 mongo-livedata@1.0.12
 mrt:later@1.6.1
