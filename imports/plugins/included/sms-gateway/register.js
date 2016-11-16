@@ -11,11 +11,15 @@ Reaction.registerPackage({
   registry: [{
       //Dashboard Card
       provides: "dashboard",
-      label: "Sms Gateway",
-      description: "Sms",
+      label: "SMS Notify",
+      description: "Notifications",
       icon: "fa fa-mobile",
       priority: 2,
-      container: "utilities"
+      container: "utilities",
+      permissions:[{
+        label:"Sms",
+        permission:"dashboard/sms"
+      }]
     },
     //Setting panel
     {
@@ -23,5 +27,20 @@ Reaction.registerPackage({
     name: "sms/settings",
     provides: "settings",
     template: "smsSettings"
+  }],
+  layout: [{
+    layout: "coreLayout",
+    theme: "default",
+    enabled: true,
+    structure: {
+      template: "email",
+      layoutHeader: "layoutHeader",
+      layoutFooter: "",
+      notFound: "notFound",
+      dashboardHeader: "dashboardHeader",
+      // dashboardHeaderControls: "emailDashboardTabs", // removed until needed for nav
+      dashboardControls: "dashboardControls",
+      adminControlsFooter: "adminControlsFooter"
+    }
   }]
 });

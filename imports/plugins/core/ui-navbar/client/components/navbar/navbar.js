@@ -17,6 +17,10 @@ function toggleMarkAsRead() {
   })
 };
 
+function toggleMarkOneAsRead(notifyId) {
+    Meteor.call('notification/markAsRead', notifyId);
+};
+
 Template.CoreNavigationBar.onCreated(function () {
   this.state = new ReactiveDict();
 });
@@ -35,7 +39,9 @@ Template.CoreNavigationBar.events({
   },
   "click .searchIcon": function (event, template) {
     const userId = Meteor.userId();
-    Meteor.call('notification/send', 'admin', userId, 'Your payment is here', 'paymentRecieved');
+    const shopId = Reaction.getShopId();
+    // Meteor.call('notification/send', 'admin', userId, 'Your payment is here', 'paymentRecieved', 'http://localhost:3000/dasboard');
+    // Meteor.call('sms/sendSms', '+2349096191371', 'welcome to reaction', shopId);
     Blaze.renderWithData(Template.searchModal, {
     }, $("body").get(0));
     $("body").css("overflow", "hidden");
@@ -93,7 +99,8 @@ Template.CoreNavigationBar.helpers({
         component:NotificationDropdown,
         notificationList,
         markAllAsRead:toggleMarkAsRead,
-        badge
+        badge,
+        markOneAsRead:toggleMarkOneAsRead
     };
   },
   onMenuButtonClick() {

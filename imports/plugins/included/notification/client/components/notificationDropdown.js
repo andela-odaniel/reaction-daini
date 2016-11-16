@@ -24,7 +24,7 @@ class NotificationDropdown extends Component {
     };
 
     render() {
-        const { notificationList, badge, markAllAsRead } = this.props;
+        const { notificationList, badge, markAllAsRead, markOneAsRead} = this.props;
         return (
             <div className="notify-bar">
                 <div className="dropdown-toolbar">
@@ -44,6 +44,9 @@ class NotificationDropdown extends Component {
                     }
                     
                     return (<li className={classes}>
+                        <a href={notify.urlLink} onClick={() => {
+                            markOneAsRead(notify._id) 
+                        }}>
                         <div className="media">
                             <div className="media-body">
                                 <strong className='notification-title'>{notify.message}</strong>
@@ -53,6 +56,7 @@ class NotificationDropdown extends Component {
                                  </div>
                             </div>
                         </div>
+                        </a>
                     </li> 
                     );
                 })}
@@ -68,6 +72,7 @@ class NotificationDropdown extends Component {
 NotificationDropdown.propTypes = {
     notificationList : PropTypes.array,
     markAllAsRead: PropTypes.func,
+    markOneAsRead:PropTypes.func,
     badge: PropTypes.string
 };
 

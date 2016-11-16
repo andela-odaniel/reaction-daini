@@ -17,7 +17,6 @@ const composer = ({}, onData) => {
           return onData(null, { notificationList});
       }
 
-       
   }
 };
 

@@ -16,6 +16,7 @@ export function sendNotification ( from, to, message, caseType, urlLink) {
         to,
         statusRead:'unread',
         caseType,
+        urlLink,
         message,
         sentAt,
     };
