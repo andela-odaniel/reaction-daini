@@ -8,3 +8,8 @@
 li .pageNames {
   margin-left: 10px;
 }
+
+.staticPageTitle{
+  font: bolder;
+  color: blue;
+}
