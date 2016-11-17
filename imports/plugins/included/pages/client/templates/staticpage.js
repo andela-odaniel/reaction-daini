@@ -31,7 +31,7 @@ Template.staticPage.events({
             //Call update method
             Meteor.call('pages.update', currentPage, name, title, body);
 
-            // Reset button innerHTML
+            // Reset button state
             document.getElementById('btn-update').innerHTML = 'Create Page';
         }
             
@@ -53,7 +53,7 @@ Template.staticPage.events({
         document.getElementById('title').value = this.pageTitle;
         CKEDITOR.instances.body.setData(this.pageBody);
 
-        // Change button innerHTML
+        // Change button state
         document.getElementById('btn-update').innerHTML = 'Update';
 
         currentPage = this._id;
