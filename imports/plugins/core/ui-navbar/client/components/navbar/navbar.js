@@ -1,6 +1,9 @@
 import { FlatButton } from "/imports/plugins/core/ui/client/components";
 import { Reaction } from "/client/api";
 import { Tags } from "/lib/collections";
+import { FlowRouter as Router } from "meteor/kadira:flow-router-ssr";
+import { BlazeLayout } from "meteor/kadira:blaze-layout";
+import { StaticPages } from "/lib/collections";
 
 Template.CoreNavigationBar.onCreated(function () {
   this.state = new ReactiveDict();
@@ -73,3 +76,26 @@ Template.CoreNavigationBar.helpers({
     };
   }
 });
+
+Template.pages.onCreated(function () {
+  this.subscribe('Pages');
+})
+
+Template.pages.helpers({
+  pagesDisplay(){
+    return StaticPages.find();
+  },
+
+  /**
+   * 
+   * 
+   * @returns The url to each page from the db
+   */
+   pathForPage() {
+
+        const routeName = this.pageRoute;
+        const path = FlowRouter.path(routeName);
+
+        return path;
+  }
+})

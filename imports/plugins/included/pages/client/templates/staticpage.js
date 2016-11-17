@@ -1,5 +1,5 @@
 import { Reaction } from "/client/api";
-import { StaticPages, Accounts } from "/lib/collections";
+import { StaticPages } from "/lib/collections";
 
 
 Template.staticPage.onCreated(function () {
@@ -69,8 +69,8 @@ Template.staticPage.events({
 
 
 Template.staticPage.helpers({
+    // Makes StaticPages data available to the template
     displayPages() {
-        // Displays pages fetched from db
         return StaticPages.find();
     }
 });

@@ -2,7 +2,7 @@
 
     <div class="container">
         <div class="col-md-6">
-            <h1>Manage Pages</h1>
+            <h3>Manage Pages</h3>
             <hr>
             <ul>
                 {{#each displayPages}}
@@ -14,7 +14,7 @@
 
         <div class="col-md-6">
 
-            <h1>Create a New Page</h1>
+            <h3>Create a New Page</h3>
             <hr>
             <form class="new_page">
                 <div class="form-group">
@@ -56,19 +56,9 @@
 
         <div class="pull-right">
             <button class="btn btn-info edit">Edit</button>
-            <a class="btn btn-success preview" href="{{ pageRoute }}">Preview</a>
+            <a class="btn btn-success preview" href="/{{ pageRoute }}">Preview</a>
             <button class="btn btn-danger delete">Delete</button>
         </div>
 
     </li>
-</template>
-
-
-<template name="pagesPreview">
-
-    <h3>{{{pageTitle}}}</h3> 
-    <div>
-        {{{ pageBody }}}
-    </div>
-
 </template>

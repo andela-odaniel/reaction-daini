@@ -26,9 +26,9 @@ Template.coreAdminLayout.helpers({
     const items = [];
 
     const introMessages = [
-      'this is your dashboard. You can click here to visit your dashboard',
-      'this is the orders page. You can click here to view your orders',
-      'this is your accounts page. You can click here to view your account information',
+      'This is your dashboard. You can visit your dashboard to know a few of your controls',
+      'This is the orders page. You can view your orders here',
+      'This is your accounts page. You can view your account information here',
       ]
 
     if (_.isArray(shortcuts)) {
