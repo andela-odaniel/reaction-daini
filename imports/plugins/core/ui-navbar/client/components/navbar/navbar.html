@@ -17,11 +17,11 @@
   </div>
 </template>
 
-
+<!--This template renders a dropdown of links to the static pages-->
 <template name="pages">
   <div class="dropdown">
-      <a class="dropdown-toggle" style="color:#fff;" data-toggle="dropdown">More
-      <span class="caret"></span></a>
+      <div class="dropdown-toggle accounts" data-toggle="dropdown">More
+      <span class="caret"></span></div>
       <ul class="dropdown-menu">
         {{#each pagesDisplay }}
           <li><a href="/{{pathForPage}}">{{ pageName }}</a></li>
