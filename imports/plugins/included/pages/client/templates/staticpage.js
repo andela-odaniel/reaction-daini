@@ -5,7 +5,6 @@ import { StaticPages } from "/lib/collections";
 Template.staticPage.onCreated(function () {
     // Subscription to Pages publication 
     this.subscribe('Pages');
-    let currentPage = [];
 });
 
 
