@@ -24,7 +24,7 @@
     <div class="menu">
       {{> tagNav tagNavProps}}
     </div>
-    
+
     <div class="search"><a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Tour</a></div>
     <div class="search searchIcon" data-step="7" data-intro="Search for products">{{> React SearchButtonComponent}}</div>
     {{#if hasPermission 'account/profile'}}
@@ -35,9 +35,27 @@
       </div>
     </div>
     {{/if}}
-    <div class="languages hidden-xs" data-step="8" data-intro="Select a language that suits you best">{{> i18nChooser}}</div>
-    <div class="accounts" data-step="9" data-intro="This is your account drop down menu you can fill out your profile or signout from here">{{> accounts tpl="loginDropdown"}}</div>
-    <div class="cart" data-step="4" data-intro="This is your cart you can always click here to see your ordered products">{{> cartIcon}}</div>
+    <div class="languages hidden-xs" data-step="6" data-intro="Select a language that suits you best">{{> i18nChooser}}</div>
+    {{> pages}}
+    <div class="accounts" data-step="8" data-intro="This is your account drop down menu you can fill out your profile or signout from here">{{> accounts tpl="loginDropdown"}}</div>
+    <div class="cart" data-step="9" data-intro="This is your cart you can always click here to see your ordered products">{{> cartIcon}}</div>
     <div class="cart-alert">{{> cartPanel}}</div>
   </div>
+</template>
+
+<!--This template renders a dropdown of links to the static pages-->
+<template name="pages">
+  <div class="dropdown">
+      <div class="dropdown-toggle accounts" data-toggle="dropdown" data-step="7" data-intro="This is a dropdown of links to static pages">More
+      <span class="caret"></span></div>
+      <ul class="dropdown-menu">
+        {{#each pagesDisplay }}
+          <li><a href="/{{pathForPage}}">{{ pageName }}</a></li>
+        {{/each}}
+      </ul>
+    </div>
+
+    <div>
+      
+    </div>
 </template>
