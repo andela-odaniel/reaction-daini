@@ -27,7 +27,7 @@
     
     <div class="search"><a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Tour</a></div>
     <div class="search searchIcon" data-step="7" data-intro="Search for products">{{> React SearchButtonComponent}}</div>
-    {{#if hasPermission permissions}}
+    {{#if hasPermission 'account/profile'}}
     <div class="dropdown">
       <div class="search dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-step="7" data-intro="Search for products">{{> React NotificationButtonComponent}}</div>
       <div class="notify-drop dropdown-menu">
