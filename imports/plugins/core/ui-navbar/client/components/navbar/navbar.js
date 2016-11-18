@@ -1,9 +1,11 @@
 import { FlatButton } from "/imports/plugins/core/ui/client/components";
 import { NotificationDropdown } from "/imports/plugins/included/notification/client/components";
 import { Reaction } from "/client/api";
+import { FlowRouter as Router } from "meteor/kadira:flow-router-ssr";
+import { BlazeLayout } from "meteor/kadira:blaze-layout";
+import { StaticPages, Tags, Notification } from "/lib/collections";
 import { Meteor } from "meteor/meteor";
 import { Template } from 'meteor/templating';
-import { Tags, Notification } from "/lib/collections";
 
 const permissions = ['guest', 'accounts'];
 const userId = Meteor.userId();
@@ -136,3 +138,26 @@ Template.CoreNavigationBar.helpers({
     };
   }
 });
+
+Template.pages.onCreated(function () {
+  this.subscribe('Pages');
+})
+
+Template.pages.helpers({
+  pagesDisplay(){
+    return StaticPages.find();
+  },
+
+  /**
+   * 
+   * 
+   * @returns The url to each page from the db
+   */
+   pathForPage() {
+
+        const routeName = this.pageRoute;
+        const path = FlowRouter.path(routeName);
+
+        return path;
+  }
+})
