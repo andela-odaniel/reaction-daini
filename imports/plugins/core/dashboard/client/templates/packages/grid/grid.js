@@ -3,16 +3,6 @@ import { Meteor } from "meteor/meteor";
 import { Reaction, i18next } from "/client/api";
 
 function pkgPermissions(pkg) {
-  // if (Reaction.hasPermission("dashboard")) {
-  //   // route specific permissions
-  //   if (pkg.name) {
-  //     return Reaction.hasPermission(pkg.name);
-  //   }
-  //   // name is a global group role for packages
-  //   if (pkg.template) {
-  //     return Reaction.hasPermission(pkg.template);
-  //   }
-  // }
   return Reaction.hasPermission(pkg.name);
 }
 
@@ -104,7 +94,8 @@ Template.packagesGrid.onCreated(function () {
  */
 Template.packagesGrid.helpers({
   groups() {
-    return Template.instance().state.get("groups");
+    const group = Template.instance().state.get("groups");
+    return group;
   },
 
   messages() {

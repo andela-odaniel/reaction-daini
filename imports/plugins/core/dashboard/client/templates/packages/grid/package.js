@@ -85,5 +85,6 @@ Template.gridPackage.helpers({
     if (pkg.name && pkg.route && pkg.template) {
       return "showPackageManagement";
     }
+    return false;
   }
 });

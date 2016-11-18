@@ -8,17 +8,17 @@ import EmailSettings from "../components/email_settings";
 
 const providers = Object.keys(require("nodemailer-wellknown/services.json"));
 
-const composer = ({}, onData) => {
+const composer = ( {}, onData ) => {
   if (Meteor.subscribe("Packages").ready()) {
     const settings = Reaction.getShopSettings().mail || {};
 
     const { service, host, port, user, password } = settings;
 
-    if (host && port && user && password && !service) {
+    if ( host && port && user && password && !service ) {
       settings.service = "custom";
     }
 
-    onData(null, { providers, settings });
+    onData( null, { providers, settings } );
   }
 };
 

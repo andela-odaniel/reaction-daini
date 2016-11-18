@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Meteor } from "meteor/meteor";
 import { Reaction } from "/client/api";
 import { Tracker } from "meteor/tracker";
+import { Accounts } from '/lib/collections';
 import { Template } from "meteor/templating";
 import { i18next } from "/client/api";
 import { Orders } from "/lib/collections";
@@ -52,12 +53,17 @@ Template.coreOrderShippingSummary.events({
   "click .cancel-order": function () {
     Meteor.call("orders/cancel", this.cartId, this.email, function (err) {
       if (err) {
-        alert("sorry your cannot cancel customer order at this moment");
+        alert("sorry you cannot cancel customer order at this moment");
       } else {
         alert("Customer order cancelled successfully");
       }
     });
-  }
+    const userId = Meteor.userId();
+    const userResult = Accounts.findOne({_id:userId});
+    console.log(userResult)
+    Meteor.call("notification/send", 'me', userId, 'Your order has been cancelled', 'orderCancel', '#');
+    
+}
 });
 
 
