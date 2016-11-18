@@ -144,7 +144,6 @@ export function Apps(optionHash) {
         return results;
       })();
     }
-
     // we have all the package app registry entries
     for (const app of packages) {
       // go through the registry entries and push enabled entries

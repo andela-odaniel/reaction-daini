@@ -80,6 +80,7 @@ Template.settingsSidebarItem.helpers({
    * @return {String} Label for item
    */
   label() {
+    console.log(Template.parentData(1), "template");
     return Template.parentData(1).label || this.label;
   }
 });

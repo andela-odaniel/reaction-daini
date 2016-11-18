@@ -97,3 +97,4 @@ practicalmeteor:sinon
 nimble:restivus
 xcv58:collection-api
 mongo@=1.1.14
+accolver:twilio-meteor
