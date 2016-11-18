@@ -1,2 +1,2 @@
-import "./checkout/example";
-import "./settings/example";
+import "./checkout/paystack";
+import "./settings/paystack";

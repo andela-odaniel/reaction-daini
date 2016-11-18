@@ -1,10 +1,9 @@
+import { HTTP } from "meteor/http";
 
-// You should not implement ThirdPartyAPI. It is supposed to represent your third party API
-// And is called so that it can be stubbed out for testing. This would be a library
-// like Stripe or Authorize.net usually just included with a NPM.require
-
-ThirdPartyAPI = {
+Paystack = {
   authorize: function (transactionType, cardData, paymentData) {
+    const result = HTTP.call("GET", "https://got-quotes.herokuapp.com/quotes");
+    console.log(result.data.quote);
     if (transactionType === "authorize") {
       const results = {
         success: true,
@@ -52,8 +51,8 @@ ThirdPartyAPI = {
 // This is the "wrapper" functions you should write in order to make your code more
 // testable. You can either mirror the API calls or normalize them to the authorize/capture/refund/refunds
 // that Reaction is expecting
-export const ExampleApi = {};
-ExampleApi.methods = {};
+export const PaystackAPI = {};
+PaystackAPI.methods = {};
 
 export const cardSchema = new SimpleSchema({
   number: { type: String },
@@ -70,22 +69,22 @@ paymentDataSchema = new SimpleSchema({
 });
 
 
-ExampleApi.methods.authorize = new ValidatedMethod({
-  name: "ExampleApi.methods.authorize",
+PaystackAPI.methods.authorize = new ValidatedMethod({
+  name: "PaystackAPI.methods.authorize",
   validate: new SimpleSchema({
     transactionType: { type: String },
     cardData: { type: cardSchema },
     paymentData: { type: paymentDataSchema }
   }).validator(),
   run({ transactionType, cardData, paymentData }) {
-    const results = ThirdPartyAPI.authorize(transactionType, cardData, paymentData);
+    const results = Paystack.authorize(transactionType, cardData, paymentData);
     return results;
   }
 });
 
 
-ExampleApi.methods.capture = new ValidatedMethod({
-  name: "ExampleApi.methods.capture",
+PaystackAPI.methods.capture = new ValidatedMethod({
+  name: "PaystackAPI.methods.capture",
   validate: new SimpleSchema({
     authorizationId: { type: String },
     amount: { type: Number, decimal: true }
@@ -93,14 +92,14 @@ ExampleApi.methods.capture = new ValidatedMethod({
   run(args) {
     const transactionId = args.authorizationId;
     const amount = args.amount;
-    const results = ThirdPartyAPI.capture(transactionId, amount);
+    const results = Paystack.capture(transactionId, amount);
     return results;
   }
 });
 
 
-ExampleApi.methods.refund = new ValidatedMethod({
-  name: "ExampleApi.methods.refund",
+PaystackAPI.methods.refund = new ValidatedMethod({
+  name: "PaystackAPI.methods.refund",
   validate: new SimpleSchema({
     transactionId: { type: String },
     amount: { type: Number, decimal: true  }
@@ -108,20 +107,20 @@ ExampleApi.methods.refund = new ValidatedMethod({
   run(args) {
     const transactionId = args.transactionId;
     const amount = args.amount;
-    const results = ThirdPartyAPI.refund(transactionId, amount);
+    const results = Paystack.refund(transactionId, amount);
     return results;
   }
 });
 
 
-ExampleApi.methods.refunds = new ValidatedMethod({
-  name: "ExampleApi.methods.refunds",
+PaystackAPI.methods.refunds = new ValidatedMethod({
+  name: "PaystackAPI.methods.refunds",
   validate: new SimpleSchema({
     transactionId: { type: String }
   }).validator(),
   run(args) {
     const { transactionId } = args;
-    const results = ThirdPartyAPI.listRefunds(transactionId);
+    const results = Paystack.listRefunds(transactionId);
     return results;
   }
 });

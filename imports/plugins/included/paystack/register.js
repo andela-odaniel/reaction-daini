@@ -24,15 +24,15 @@ Reaction.registerPackage({
     // Settings panel
     {
       label: "Paystack Settings", // this key (minus spaces) is used for translations
-      route: "/dashboard/example",
+      route: "/dashboard/paystack",
       provides: "settings",
       container: "dashboard",
-      template: "exampleSettings"
+      template: "paystackSettings"
     },
 
     // Payment form for checkout
     {
-      template: "examplePaymentForm",
+      template: "paystackForm",
       provides: "paymentMethod"
     }
   ]

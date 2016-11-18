@@ -4,7 +4,7 @@ import { Meteor } from "meteor/meteor";
 import { check, Match } from "meteor/check";
 // reaction modules
 import { Reaction, Logger } from "/server/api";
-import { ExampleApi } from "./exampleapi";
+import { PaystackAPI } from "./paystack-stubbed-api";
 
 function luhnValid(x) {
   return [...x].reverse().reduce((sum, c, i) => {
@@ -59,7 +59,7 @@ Meteor.methods({
    * @param  {Object} paymentData The details of the Payment Needed
    * @return {Object} results normalized
    */
-  "exampleSubmit": function (transactionType, cardData, paymentData) {
+  "paystackSubmit": function (transactionType, cardData, paymentData) {
     check(transactionType, String);
     check(cardData, {
       name: String,
@@ -77,7 +77,7 @@ Meteor.methods({
     const total = parseFloat(paymentData.total);
     let result;
     try {
-      const transaction = ExampleApi.methods.authorize.call({
+      const transaction = PaystackAPI.methods.authorize.call({
         transactionType: transactionType,
         cardData: cardData,
         paymentData: paymentData
@@ -110,11 +110,11 @@ Meteor.methods({
    * @param {Object} paymentData Object containing data about the transaction to capture
    * @return {Object} results normalized
    */
-  "example/payment/capture": function (paymentData) {
+  "paystack/payment/capture": function (paymentData) {
     check(paymentData, Reaction.Schemas.PaymentMethod);
     const authorizationId = paymentData.transactionId;
     const amount = paymentData.amount;
-    const response = ExampleApi.methods.capture.call({
+    const response = PaystackAPI.methods.capture.call({
       authorizationId: authorizationId,
       amount: amount
     });
@@ -131,11 +131,11 @@ Meteor.methods({
    * @param  {Number} amount The amount to be refunded
    * @return {Object} result
    */
-  "example/refund/create": function (paymentMethod, amount) {
+  "paystack/refund/create": function (paymentMethod, amount) {
     check(paymentMethod, Reaction.Schemas.PaymentMethod);
     check(amount, Number);
     const { transactionId } = paymentMethod;
-    const response = ExampleApi.methods.refund.call({
+    const response = PaystackAPI.methods.refund.call({
       transactionId: transactionId,
       amount: amount
     });
@@ -151,10 +151,10 @@ Meteor.methods({
    * @param  {Object} paymentMethod Object containing the pertinant data
    * @return {Object} result
    */
-  "example/refund/list": function (paymentMethod) {
+  "paystack/refund/list": function (paymentMethod) {
     check(paymentMethod, Reaction.Schemas.PaymentMethod);
     const { transactionId } = paymentMethod;
-    const response = ExampleApi.methods.refunds.call({
+    const response = PaystackAPI.methods.refunds.call({
       transactionId: transactionId
     });
     const result = [];

@@ -1,0 +1,53 @@
+<template name="paystackForm">
+  <form>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <button type="button" onclick="payWithPaystack()"> Pay </button>
+    <script>
+      var payStackDetails = {
+      key: 'pk_test_2594e8950a3a70fc754d143c4fc6721e8138f70c',
+      email: '{{getCustomerEmail}}',
+      ref: "{{generateTransactionID}}",
+      amount: "{{getOrderPrice}}",
+      metadata: {
+         custom_fields: [
+            {
+                display_name: "Mobile Number",
+                variable_name: "mobile_number",
+                value: "+2348012345678"
+            }
+         ]
+      },
+      callback: function(response){
+        console.log(response);
+        Blaze._getTemplate("paystackForm").__helpers[" handlePayment"](response.reference);
+          alert('success. transaction ref is ' + response.reference);
+      },
+      onClose: function(){
+        alert('You closed it');
+      },
+    };
+    console.log("amount",payStackDetails);
+    
+    function payWithPaystack(){
+       
+    console.log("amount",payStackDetails);
+    var handler = PaystackPop.setup(payStackDetails);
+    handler.openIframe();
+  }
+    </script>
+    <!--<script
+    src="https://js.paystack.co/v1/inline.js" 
+    data-key="pk_test_2594e8950a3a70fc754d143c4fc6721e8138f70c"
+    data-email="{{getCustomerEmail}}"
+    data-amount="{{getOrderPrice}}"
+    data-ref="{{generateTransactionID}}"
+    data-callback="{{ submitPayment}}"
+    data-onClose="showError"
+  ></script>
+  <script>
+    function showError(){
+      console.log("is closed");
+    }
+  </script>-->
+  </form>
+</template>

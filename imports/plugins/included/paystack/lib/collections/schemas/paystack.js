@@ -1,7 +1,7 @@
 import { SimpleSchema } from "meteor/aldeed:simple-schema";
 import { PackageConfig } from "/lib/collections/schemas/registry";
 
-export const ExamplePackageConfig = new SimpleSchema([
+export const PaystackPackageConfig = new SimpleSchema([
   PackageConfig, {
     "settings.mode": {
       type: Boolean,
@@ -15,7 +15,7 @@ export const ExamplePackageConfig = new SimpleSchema([
   }
 ]);
 
-export const ExamplePayment = new SimpleSchema({
+export const PaystackSchema = new SimpleSchema({
   payerName: {
     type: String,
     label: "Cardholder name"

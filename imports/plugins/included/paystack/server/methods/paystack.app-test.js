@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { expect } from "meteor/practicalmeteor:chai";
 import { sinon } from "meteor/practicalmeteor:sinon";
 
-import { ExampleApi } from "./exampleapi";
+import { PaystackAPI } from "./paystack-stubbed-api";
 
 const paymentMethod = {
   processor: "Generic",
@@ -13,7 +13,7 @@ const paymentMethod = {
 };
 
 
-describe("ExampleApi", function () {
+describe("PaystackAPI", function () {
   let sandbox;
 
   beforeEach(function () {
@@ -24,7 +24,7 @@ describe("ExampleApi", function () {
     sandbox.restore();
   });
 
-  it("should return data from ThirdPartyAPI authorize", function () {
+  it("should return data from PaystackAPI authorize", function () {
     const cardData = {
       name: "Test User",
       number: "4242424242424242",
@@ -39,7 +39,7 @@ describe("ExampleApi", function () {
     };
 
     const transactionType = "authorize";
-    const transaction = ExampleApi.methods.authorize.call({
+    const transaction = PaystackAPI.methods.authorize.call({
       transactionType: transactionType,
       cardData: cardData,
       paymentData: paymentData
@@ -47,7 +47,7 @@ describe("ExampleApi", function () {
     expect(transaction).to.not.be.undefined;
   });
 
-  it("should return data from ThirdPartAPI capture", function (done) {
+  it("should return data from PaystackAPI capture", function (done) {
     const authorizationId = "abc123";
     const amount = 19.99;
     const results = ExampleApi.methods.capture.call({
@@ -91,7 +91,7 @@ describe("Submit payment", function () {
       currency: "USD"
     };
 
-    const authorizeStub = sandbox.stub(ExampleApi.methods.authorize, "call", () => authorizeResult);
+    const authorizeStub = sandbox.stub(PaystackAPI.methods.authorize, "call", () => authorizeResult);
     const results = Meteor.call("exampleSubmit", "authorize", cardData, paymentData);
     expect(authorizeStub).to.have.been.calledWith({
       transactionType: "authorize",
@@ -132,14 +132,14 @@ describe("Capture payment", function () {
     sandbox.restore();
   });
 
-  it("should call ExampleApi with transaction ID", function () {
+  it("should call PaystackAPI with transaction ID", function () {
     const captureResults = { success: true };
     const authorizationId = "abc1234";
     paymentMethod.transactionId = authorizationId;
     paymentMethod.amount = 19.99;
 
-    const captureStub = sandbox.stub(ExampleApi.methods.capture, "call", () => captureResults);
-    const results = Meteor.call("example/payment/capture", paymentMethod);
+    const captureStub = sandbox.stub(PaystackAPI.methods.capture, "call", () => captureResults);
+    const results = Meteor.call("paystack/payment/capture", paymentMethod);
     expect(captureStub).to.have.been.calledWith({
       authorizationId: authorizationId,
       amount: 19.99
@@ -148,11 +148,11 @@ describe("Capture payment", function () {
   });
 
   it("should throw an error if transaction ID is not found", function () {
-    sandbox.stub(ExampleApi.methods, "capture", function () {
+    sandbox.stub(PaystackAPI.methods, "capture", function () {
       throw new Meteor.Error("Not Found");
     });
     expect(function () {
-      Meteor.call("example/payment/capture", "abc123");
+      Meteor.call("paystack/payment/capture", "abc123");
     }).to.throw;
   });
 });
@@ -168,13 +168,13 @@ describe("Refund", function () {
     sandbox.restore();
   });
 
-  it("should call ExampleApi with transaction ID", function () {
+  it("should call PaystackAPI with transaction ID", function () {
     const refundResults = { success: true };
     const transactionId = "abc1234";
     const amount = 19.99;
     paymentMethod.transactionId = transactionId;
-    const refundStub = sandbox.stub(ExampleApi.methods.refund, "call", () => refundResults);
-    Meteor.call("example/refund/create", paymentMethod, amount);
+    const refundStub = sandbox.stub(PaystackAPI.methods.refund, "call", () => refundResults);
+    Meteor.call("paystack/refund/create", paymentMethod, amount);
     expect(refundStub).to.have.been.calledWith({
       transactionId: transactionId,
       amount: amount
@@ -182,13 +182,13 @@ describe("Refund", function () {
   });
 
   it("should throw an error if transaction ID is not found", function () {
-    sandbox.stub(ExampleApi.methods.refund, "call", function () {
+    sandbox.stub(PaystackAPI.methods.refund, "call", function () {
       throw new Meteor.Error("404", "Not Found");
     });
     const transactionId = "abc1234";
     paymentMethod.transactionId =  transactionId;
     expect(function () {
-      Meteor.call("example/refund/create", paymentMethod, 19.99);
+      Meteor.call("paystack/refund/create", paymentMethod, 19.99);
     }).to.throw(Meteor.Error, /Not Found/);
   });
 });
@@ -209,13 +209,13 @@ describe("List Refunds", function () {
     const refundArgs = {
       transactionId: "abc1234"
     };
-    const refundStub = sandbox.stub(ExampleApi.methods.refunds, "call", () => refundResults);
-    Meteor.call("example/refund/list", paymentMethod);
+    const refundStub = sandbox.stub(PaystackAPI.methods.refunds, "call", () => refundResults);
+    Meteor.call("paystack/refund/list", paymentMethod);
     expect(refundStub).to.have.been.calledWith(refundArgs);
   });
 
   it("should throw an error if transaction ID is not found", function () {
-    sandbox.stub(ExampleApi.methods, "refunds", function () {
+    sandbox.stub(PaystackAPI.methods, "refunds", function () {
       throw new Meteor.Error("404", "Not Found");
     });
     expect(() => Meteor.call("example/refund/list", paymentMethod)).to.throw(Meteor.Error, /Not Found/);

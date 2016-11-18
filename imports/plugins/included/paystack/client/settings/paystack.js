@@ -1,18 +1,18 @@
 import { Template } from "meteor/templating";
 import { Reaction } from "/client/api";
 import { Packages } from "/lib/collections";
-import { ExamplePackageConfig } from "../../lib/collections/schemas";
+import { PaystackPackageConfig } from "../../lib/collections/schemas";
 
-import "./example.html";
+import "./paystack.html";
 
 
 Template.exampleSettings.helpers({
-  ExamplePackageConfig() {
-    return ExamplePackageConfig;
+  PaystackPackageConfig() {
+    return PaystackPackageConfig;
   },
   packageData() {
     return Packages.findOne({
-      name: "example-paymentmethod",
+      name: "reaction-paystack",
       shopId: Reaction.getShopId()
     });
   }
@@ -22,7 +22,7 @@ Template.exampleSettings.helpers({
 Template.example.helpers({
   packageData: function () {
     return Packages.findOne({
-      name: "example-paymentmethod",
+      name: "reaction-paystack",
       shopId: Reaction.getShopId()
     });
   }
@@ -38,11 +38,11 @@ AutoForm.hooks({
   "example-update-form": {
     onSuccess: function () {
       Alerts.removeSeen();
-      return Alerts.add("Example Payment Method settings saved.", "success");
+      return Alerts.add("Paystack settings saved.", "success");
     },
     onError: function (operation, error) {
       Alerts.removeSeen();
-      return Alerts.add("Example Payment Method settings update failed. " + error, "danger");
+      return Alerts.add("Paystack settings update failed. " + error, "danger");
     }
   }
 });
