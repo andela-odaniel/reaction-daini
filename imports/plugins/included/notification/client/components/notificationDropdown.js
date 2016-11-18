@@ -62,7 +62,7 @@ class NotificationDropdown extends Component {
                 })}
                 </ul>
                 <div className="dropdown-footer text-center">
-                    <a href="#">View All</a>
+                    <a href="/notifications">View All</a>
                 </div>
             </div>
         );
