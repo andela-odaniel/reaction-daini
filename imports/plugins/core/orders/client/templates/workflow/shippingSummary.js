@@ -59,8 +59,7 @@ Template.coreOrderShippingSummary.events({
       }
     });
     const userId = Meteor.userId();
-    const userResult = Accounts.findOne({_id:userId});
-    console.log(userResult)
+    const userResult = Accounts.findOne({_id: userId});
     Meteor.call("notification/send", 'me', userId, 'Your order has been cancelled', 'orderCancel', '#');
     
 }

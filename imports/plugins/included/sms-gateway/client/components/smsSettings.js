@@ -36,7 +36,6 @@ class SmsSettings extends Component {
     render() {
         const { providers } = this.props;
         const { settings, isSaving } = this.state;
-        console.log(settings);
 
         return (<Panel header={<h3>Sms Notification Settings</h3>}>
         <form onSubmit={this.handleSubmit}>
