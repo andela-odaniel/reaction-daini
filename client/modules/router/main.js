@@ -185,7 +185,7 @@ Router.initPackageRoutes = () => {
 
 
     shop.route("/notifications", {
-      name:"notifications",
+      name: "notifications",
       action() {
         ReactionLayout({
           template: "notifications"

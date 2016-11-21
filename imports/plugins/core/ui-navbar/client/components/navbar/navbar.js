@@ -7,7 +7,7 @@ import { Tags, Notification } from "/lib/collections";
 
 const permissions = ['guest', 'accounts'];
 const userId = Meteor.userId();
-const sub = Meteor.subscribe("NotificationList", userId);
+const sub = Meteor.subscribe("NotificationList", userId).ready();
 Reaction.hasPermission(permissions);
 
 function toggleMarkAsRead() {

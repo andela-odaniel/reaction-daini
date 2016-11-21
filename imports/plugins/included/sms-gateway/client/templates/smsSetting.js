@@ -3,7 +3,6 @@ import { SmsSetting } from '/lib/collections';
 import { Meteor } from "meteor/meteor";
 import Alert from "sweetalert2";
 import { Reaction, i18next } from "/client/api";
-import actions from "../actions";
     
 
 function saveSettings(settings, callback) {
