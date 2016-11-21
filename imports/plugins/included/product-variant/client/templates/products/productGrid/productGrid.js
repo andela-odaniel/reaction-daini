@@ -53,7 +53,6 @@ Template.productGrid.onRendered(function () {
  const currentUser = Accounts.findOne(Meteor.userId());
 
  const myintro = introJs();
-
   
   
  if(Meteor.user().emails.length > 0 && !currentUser.takenTour){
