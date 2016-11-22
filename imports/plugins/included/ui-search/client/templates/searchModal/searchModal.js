@@ -3,7 +3,7 @@ import React from "react";
 import { DataType } from "react-taco-table";
 import { Template } from "meteor/templating";
 import { i18next } from "/client/api";
-import { ProductSearch, Tags, OrderSearch, AccountSearch } from "/lib/collections";
+import { ProductSearch, Tags, OrderSearch, AccountSearch, Notification } from "/lib/collections";
 import { IconButton, SortableTable } from "/imports/plugins/core/ui/client/components";
 import { Session } from 'meteor/session';
 /*
@@ -51,11 +51,11 @@ Template.searchModal.onCreated(function () {
     const brandPicked = this.state.get('brandPicked');
     const facets = this.state.get("facets") || [];
     const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets, priceRange, brandPicked);
-    
+    const userId = Meteor.userId();
+    // console.log(typeof userId, 'userid');
+    const subNoti = this.subscribe("NotificationList", userId);
+    // console.log(subNoti);
     if (sub.ready()) {
-      /*
-       * Product Search
-       */
       if (searchCollection === "products") {
         const rangeBestSeller = this.state.get('bestSellers');
         let sortBest = '';
@@ -67,6 +67,7 @@ Template.searchModal.onCreated(function () {
             sortBest = 1;
         }
         const productResults = ProductSearch.find({}, {sort:{numSold:sortBest}}).fetch();
+
         const productResultsCount = productResults.length;
         this.state.set("productSearchResults", productResults);
         this.state.set("productSearchCount", productResultsCount);

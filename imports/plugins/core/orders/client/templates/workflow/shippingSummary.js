@@ -3,6 +3,7 @@ import { Meteor } from "meteor/meteor";
 import { Reaction } from "/client/api";
 import { ReactiveDict } from "meteor/reactive-dict";
 import { Tracker } from "meteor/tracker";
+import { Accounts } from '/lib/collections';
 import { Template } from "meteor/templating";
 import { i18next } from "/client/api";
 import { Orders } from "/lib/collections";

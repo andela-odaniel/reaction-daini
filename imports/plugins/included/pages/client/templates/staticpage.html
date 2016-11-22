@@ -1,0 +1,64 @@
+<template name="staticPage">
+
+    <div class="container">
+        <div class="col-md-6">
+            <h3>Manage Pages</h3>
+            <hr>
+            <ul>
+                {{#each displayPages}}
+                    {{ > displayPageName }} <br>
+                {{/each}}
+            </ul>
+            
+        </div>
+
+        <div class="col-md-6">
+
+            <h3>Create a New Page</h3>
+            <hr>
+            <form class="new_page">
+                <div class="form-group">
+                    <label for="page-name">Page Name:</label>
+                    
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter page name">
+                    
+                </div>
+                <div class="form-group">
+                    <label for="page-title">Page Title:</label>
+                    
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter page title <Could be same as your page name>">
+                    
+                </div>
+
+                <h5><strong>Page Content:</strong></h5>
+                <textarea cols="20" rows="10" id="body" name="body"></textarea>
+                 <script>
+                    CKEDITOR.replace("body");
+                </script>
+                <br>
+                
+                <div class="form-group"> 
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-info" id="btn-update">Create Page</button>
+                    </div>
+                </div>
+            </form>
+
+            
+        </div>
+    </div>
+ 
+</template>
+
+<template name="displayPageName">
+    <li class="pageNames">
+        <span > <strong>{{ pageName }}</strong></span>
+
+        <div class="pull-right">
+            <button class="btn btn-info edit">Edit</button>
+            <a class="btn btn-success preview" href="/{{ pageRoute }}">Preview</a>
+            <button class="btn btn-danger delete">Delete</button>
+        </div>
+
+    </li>
+</template>

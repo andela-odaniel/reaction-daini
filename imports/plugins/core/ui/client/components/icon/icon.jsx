@@ -3,7 +3,7 @@ import classnames from "classnames/dedupe";
 
 class Icon extends Component {
   render() {
-    const { icon } = this.props;
+    const { icon, notifyIcon } = this.props;
     let classes;
 
     if (icon) {
@@ -17,10 +17,19 @@ class Icon extends Component {
       }
     }
 
-    classes = classnames({
-      "rui": true,
-      "font-icon": true,
-    }, classes, this.props.className);
+    if(notifyIcon) {
+      classes = classnames({
+        "notify-icon":true,
+        "rui": true,
+        "font-icon": true,
+      }, classes, this.props.className);
+    } else {
+      classes = classnames({
+        "rui": true,
+        "font-icon": true,
+      }, classes, this.props.className);
+    }
+    
 
     return (
       <i className={classes} />
@@ -30,7 +39,8 @@ class Icon extends Component {
 
 Icon.propTypes = {
   className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  icon: PropTypes.string.isRequired
+  icon: PropTypes.string.isRequired,
+  notifyIcon: PropTypes.bool
 };
 
 export default Icon;
