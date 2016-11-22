@@ -26,19 +26,22 @@
     </div>
 
     <div class="search"><a href="javascript:void(0);" onclick="javascript:introJs().start();">Take Tour</a></div>
-    <div class="search searchIcon" data-step="7" data-intro="Search for products">{{> React SearchButtonComponent}}</div>
+    <div class="search searchIcon" data-step="1" data-intro="Search for products">{{> React SearchButtonComponent}}</div>
     {{#if hasPermission 'account/profile'}}
     <div class="dropdown">
-      <div class="search dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="3000" data-step="7" data-intro="Search for products">{{> React NotificationButtonComponent}}</div>
+      <div class="search dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" 
+          data-delay="3000" data-step="2" data-intro="This is your notifications icon">
+            {{> React NotificationButtonComponent}}
+      </div>
       <div class="notify-drop dropdown-menu">
         {{> React NotificationDropdownComponent}}
       </div>
     </div>
     {{/if}}
-    <div class="languages hidden-xs" data-step="6" data-intro="Select a language that suits you best">{{> i18nChooser}}</div>
+    <div class="languages hidden-xs" data-step="3" data-intro="Select a language that suits you here">{{> i18nChooser}}</div>
     {{> pages}}
-    <div class="accounts" data-step="8" data-intro="This is your account drop down menu you can fill out your profile or signout from here">{{> accounts tpl="loginDropdown"}}</div>
-    <div class="cart" data-step="9" data-intro="This is your cart you can always click here to see your ordered products">{{> cartIcon}}</div>
+    <div class="accounts" data-step="5" data-intro="This is your account drop down menu you can fill out your profile or signout from here">{{> accounts tpl="loginDropdown"}}</div>
+    <div class="cart" data-step="6" data-intro="This is your cart you can always click here to see your ordered products">{{> cartIcon}}</div>
     <div class="cart-alert">{{> cartPanel}}</div>
   </div>
 </template>
@@ -46,7 +49,7 @@
 <!--This template renders a dropdown of links to the static pages-->
 <template name="pages">
   <div class="dropdown">
-      <div class="dropdown-toggle accounts" data-toggle="dropdown" data-step="7" data-intro="This is a dropdown of links to static pages">More
+      <div class="dropdown-toggle accounts" data-toggle="dropdown" data-step="4" data-intro="This is a dropdown of links to other pages">More
       <span class="caret"></span></div>
       <ul class="dropdown-menu">
         {{#each pagesDisplay }}
