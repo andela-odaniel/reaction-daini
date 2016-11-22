@@ -317,7 +317,7 @@ Template.orderStatusDetail.helpers({
         if (fullItem._id === shipmentItem._id) {
           if (fullItem.workflow) {
             if (_.isArray(fullItem.workflow.workflow)) {
-              return _.includes(fullItem.workflow.workflow, "coreOrderItemWorkflow/completed");
+              return _.includes(fullItem.workflow.workflow, "coreOrderItemWorkflow/shipped");
             }
           }
         }

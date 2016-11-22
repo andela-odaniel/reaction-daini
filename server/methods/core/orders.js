@@ -239,16 +239,6 @@ Meteor.methods({
     // TODO: In the future, this could be handled by shipping delivery status
     const workflowResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/shipped", order, itemIds);
 
-    if (workflowResult === 1) {
-      // Move to completed status for items
-      completedItemsResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/completed", order, itemIds);
-
-      if (completedItemsResult === 1) {
-        // Then try to mark order as completed.
-        completedOrderResult = Meteor.call("workflow/pushOrderWorkflow", "coreOrderWorkflow", "completed", order);
-      }
-    }
-
     if (order.email) {
       Meteor.call("orders/sendNotification", order, (err) => {
         if (err) {
@@ -434,7 +424,7 @@ Meteor.methods({
     Reaction.Email.send({
       to: order.email,
       from: `${shop.name} <${shop.emails[0].address}>`,
-      subject: `Your order is confirmed`,
+      subject: "Your order is confirmed",
       // subject: `Order update from ${shop.name}`,
       html: SSR.render(tpl,  dataForOrderEmail)
     });
@@ -857,7 +847,8 @@ Meteor.methods({
    * This method is called when an order is to be deleted
    * @return {null}
    */
-  "orders/cancel": function (cartId, email) {
+  "orders/cancel": function (cartId, email, reason) {
+    check(reason, String);
     check(cartId, String);
     check(email, String);
     this.unblock();
@@ -870,11 +861,35 @@ Meteor.methods({
       cartId: cartId
     }, {
       $set: {
-        "workflow.status": "coreOrderWorkflow/cancelled"
+        "workflow.status": "coreOrderWorkflow/cancelled",
+        "workflow.cancelledMessage": reason
       },
       $push: {
         "workflow.workflow": "coreOrderWorkflow/cancelled"
       }
     });
+  },
+   /**
+   * orders/complete
+   * This method is called when an order is to be completed
+   * @return {null}
+   */
+  "orders/complete": function (order, shipment) {
+    check(order, Object);
+    check(shipment, Object);
+
+    const itemIds = shipment.items.map((item) => {
+      return item._id;
+    });
+
+    // Move to completed status for items
+    const completedItemsResult = Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/completed", order, itemIds);
+
+    if (completedItemsResult === 1) {
+      // Then try to mark order as completed.
+      Meteor.call("workflow/pushOrderWorkflow", "coreOrderWorkflow", "completed", order);
+    }
   }
 });
+
+

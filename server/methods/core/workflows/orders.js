@@ -33,7 +33,6 @@ Meteor.methods({
    */
   "workflow/coreOrderWorkflow/coreOrderCompleted": function (options) {
     check(options, Match.OrderHookOptions());
-
     const order = options.order;
 
     const result = _.every(order.items, (item) => {
