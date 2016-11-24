@@ -1,11 +1,20 @@
 <template name="i18nSettings">
+  <div class="i18nSettings" id="internalization-settings">   
   <div class="panel panel-default">
+    <div class="panel-heading">
+       <button type="button" class="btn btn-success" onclick="runInternationalizationTour()">Take Tour</button> 
+    </div>
+    <script>
+      function runInternationalizationTour() {
+         introJs("#internalization-settings").start();    
+      } 
+   </script>
     <div class="panel-body">
       {{#autoForm collection=Collections.Shops doc=shop id="shopEditLocalizationSettingsForm" type="update" autosave=true}}
-        {{> afQuickField name='timezone' options=timezoneOptions}}
-        {{> afQuickField name='currency' options=currencyOptions}}
-        {{> afQuickField name='baseUOM' options=uomOptions}}
-        {{> afQuickField name='language' options=enabledLanguages}}
+        {{> afQuickField name='timezone' options=timezoneOptions data-intro="Set your time zone" data-position="auto"}}
+        {{> afQuickField name='currency' options=currencyOptions data-intro="Set your default currency" data-position="auto"}}
+        {{> afQuickField name='baseUOM' options=uomOptions data-intro="Set your default unit of measure" data-position="auto"}}
+        {{> afQuickField name='language' options=enabledLanguages data-intro="Set your default language. Users can change this for their use" data-position="auto"}}
       {{/autoForm}}
     </div>
     <div class="panel-body">
@@ -22,6 +31,7 @@
         </div>
       {{/each}}
     </div>
+  </div>
   </div>
 
 </template>

@@ -1,6 +1,6 @@
 /* eslint camelcase: 0 */
 import { Template } from "meteor/templating";
-import { Packages } from "/lib/collections";
+import { Packages, Accounts } from "/lib/collections";
 import { PaypalPackageConfig } from "../../../lib/collections/schemas";
 
 Template.paypalSettings.helpers({
@@ -27,4 +27,27 @@ AutoForm.hooks({
       return Alerts.add("Paypal settings update failed. " + error, "danger");
     }
   }
+});
+
+Template.paypalSettings.events({
+  'mouseenter .paypalTour'(){
+
+    const currentUser = Accounts.findOne(Meteor.userId());
+    const myintro = introJs("#paypal-config");
+
+    if(!currentUser.paypalSettingsTour){
+      myintro.start();
+    }
+
+    myintro.oncomplete(function() { 
+      Accounts.update({_id: Meteor.userId()}, {$set:{paypalSettingsTour: true}}, function (error, res) {
+      });
+        
+    });
+  },
+
+  'mouseleave .paypalTour'(){
+     const myintro = introJs("#paypal-config");
+     myintro.exit();
+  },
 });

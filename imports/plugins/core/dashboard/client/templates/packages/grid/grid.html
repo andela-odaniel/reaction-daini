@@ -2,7 +2,7 @@
   <div class="rui items">
     {{#each group in groups}}
       <div class="rui item">
-        {{#cardGroup title=group step=@index intro=messages}}
+        {{#cardGroup title=group }}
           {{> packagesGridGroup apps=(appsInGroup group)}}
         {{/cardGroup}}
       </div>
