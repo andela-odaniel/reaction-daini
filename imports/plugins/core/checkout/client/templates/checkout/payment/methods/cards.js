@@ -31,6 +31,7 @@ Template.corePaymentMethods.helpers({
     const self = this;
     if (!(this.icon && this.label)) {
       const app = Packages.findOne(this.packageId);
+      console.log(app);
       for (const registry of app.registry) {
         if (!(registry.provides === "dashboard")) {
           continue;
