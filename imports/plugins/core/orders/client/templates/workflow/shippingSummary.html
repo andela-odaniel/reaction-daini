@@ -23,12 +23,41 @@
       <span>{{tracking}}</span> -
       <span class="badge badge-{{shipmentStatus.status}}">{{shipmentStatus.label}}</span>
     </div>
-    
-    {{#unless isCancelledOrder}}
-      <div class="col-xs-12" style="margin-top:1em">
-        <button class="btn btn-sm btn-warning cancel-order">Cancel order</button>
-      </div>
+    <hr>
+    {{#unless showCancel}}
+       {{> orderCancelButton order}}
     {{/unless}}
+  </div>
+</template>
 
+<template name="orderCancelButton">
+  <div class="col-xs-12" style="margin-top:1em;">
+    <button class="btn btn-sm btn-warning toggle-options">Cancel Order 
+      {{#if isVisible}}
+         <i class="icon fa fa-caret-down"></i>
+         {{else}}
+         <i class="icon fa fa-caret-right"></i>
+      {{/if}}
+    </button>
+    <button class="btn btn-sm btn-success complete pull-right">Complete order</button>
+    {{#if isVisible}}
+      <div class="col-xs-12" style="margin-top:1em;padding:0;padding-bottom:1em;background-color:#ccc">
+        <ul class="list-group">
+          {{#each reason in getCancellationReasons}}
+              <li class="list-group-item reason">
+                {{reason}}
+                {{#if isSelected reason}}
+                  <span class="pull-right">
+                    <i class="icon fa fa-check"></i>
+                  </span>
+                {{/if}}
+              </li>
+          {{/each}}
+        </ul>
+        <div class="col-xs-12">
+            <button class="btn btn-sm btn-default cancel" style="margin-top:-1em">Continue</button>
+        </div>
+      </div>
+    {{/if}}
   </div>
 </template>

@@ -94,8 +94,7 @@ Template.packagesGrid.onCreated(function () {
  */
 Template.packagesGrid.helpers({
   groups() {
-    const group = Template.instance().state.get("groups");
-    return group;
+    return Template.instance().state.get("groups");
   },
 
   messages() {
