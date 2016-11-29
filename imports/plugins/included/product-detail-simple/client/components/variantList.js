@@ -5,6 +5,11 @@ import { Divider, Translation } from "/imports/plugins/core/ui/client/components
 import { ChildVariant } from "./";
 
 class VariantList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.showIfNotDigital = this.showIfNotDigital.bind(this);
+  }
 
   handleVariantEditClick = (event, editButtonProps) => {
     if (this.props.onEditVariant) {
@@ -120,6 +125,24 @@ class VariantList extends Component {
     return null;
   }
 
+  showIfNotDigital() {
+    if (this.props.isDigital === "" || !this.props.isDigital) {
+      return (
+        <div>
+        <Divider
+          i18nKeyLabel="productDetail.availableOptions"
+          label="Available Options"
+        />
+        <div className="row variant-product-options">
+          {this.renderChildVariants()}
+        </div>
+        </div>
+      );
+    }
+
+    return null;
+  }
+
   render() {
     return (
       <div className="product-variants">
@@ -130,13 +153,7 @@ class VariantList extends Component {
         <ul className="variant-list list-unstyled" id="variant-list">
           {this.renderVariants()}
         </ul>
-        <Divider
-          i18nKeyLabel="productDetail.availableOptions"
-          label="Available Options"
-        />
-        <div className="row variant-product-options">
-          {this.renderChildVariants()}
-        </div>
+        {this.showIfNotDigital()}
       </div>
     );
   }
@@ -147,11 +164,13 @@ VariantList.propTypes = {
   childVariants: PropTypes.arrayOf(PropTypes.object),
   displayPrice: PropTypes.func,
   editable: PropTypes.bool,
+  isDigital: PropTypes.any,
   isSoldOut: PropTypes.func,
   onEditVariant: PropTypes.func,
   onMoveVariant: PropTypes.func,
   onVariantClick: PropTypes.func,
   onVariantVisibiltyToggle: PropTypes.func,
+  products: PropTypes.object,
   variantIsSelected: PropTypes.func,
   variants: PropTypes.arrayOf(PropTypes.object)
 };

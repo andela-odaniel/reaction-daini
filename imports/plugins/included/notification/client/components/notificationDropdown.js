@@ -35,7 +35,7 @@ class NotificationDropdown extends Component {
                 </div>
                 <ul className="dropdown-notify notifications">
                 {this.checkNotifications}
-                {notificationList.map((notify)=> {
+                {notificationList.map((notify, index)=> {
                   const classes = "notification " + notify.statusRead;
                   if (notify.sentAt === "") {
                     var timeNow = "";
@@ -43,7 +43,7 @@ class NotificationDropdown extends Component {
                     var timeNow = moment(notify.sentAt).fromNow();
                   }
 
-                  return (<li className={classes}>
+                  return (<li className={classes} key={index}>
                         <a href={notify.urlLink} onClick={() => {
                           markOneAsRead(notify._id);
                         }}

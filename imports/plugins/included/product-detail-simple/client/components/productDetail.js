@@ -6,6 +6,8 @@ import {
   MenuItem,
   Translation,
   Toolbar,
+  Divider,
+  FieldGroup,
   ToolbarGroup
 } from "/imports/plugins/core/ui/client/components/";
 import {
@@ -16,8 +18,20 @@ import {
 } from "./";
 import { AlertContainer } from "/imports/plugins/core/ui/client/containers";
 import { PublishContainer } from "/imports/plugins/core/revisions";
+import "./inputToggle.css";
+
 
 class ProductDetail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      digital: this.props.isDigital,
+      cartQuantity: "number"
+    };
+
+    this.switchDigital = this.switchDigital.bind(this);
+  }
+
   get tags() {
     return this.props.tags || [];
   }
@@ -71,6 +85,62 @@ class ProductDetail extends Component {
       );
     }
 
+    return null;
+  }
+
+  switchDigital(e) {
+    this.setState({"digital": e.target.checked});
+    const productId = this.props.product._id;
+    const checked = e.target.checked;
+    this.props.onProductFieldChange(productId, "productType", checked);
+    this.props.changeParentIsDigitalState(e.target.checked);
+    if (!this.state.digital) {
+      this.setState({"cartQuantity": "hidden"});
+    } else {
+      this.setState({"cartQuantity": "number"});
+    }
+  }
+
+  renderInputToggle() {
+    if (this.props.hasAdminPermission) {
+      return (
+        <div className="switch-middle">
+          <b className="switch-text">Physical Product</b>
+            <label className="switch">
+              <input id="digital" type="checkbox" defaultChecked={this.state.digital} onChange={this.switchDigital}/>
+              <div className="slider round"/>
+            </label>
+          <b className="switch-text">Digital Product</b>
+        </div>
+      );
+    }
+
+    return null;
+  }
+
+  renderDigitalDetails() {
+    if (this.props.hasAdminPermission && this.state.digital) {
+      return (
+        <div>
+          <Divider
+            label="Digital product options"
+          />
+          <FieldGroup
+            componentClass="select"
+            name="digitalCategory"
+            onChange={this.handleStateChange}>
+            <option value="">Choose a category..</option>
+            <option value="audio">Audio</option>
+            <option value="book">Book</option>
+            <option value="video">Video</option>
+            <option value="software">Software</option>
+          </FieldGroup>
+
+          <input className="btn btn-success hidden" type="file" id="uploadFile"/>
+          <label className="btn btn-success no-round" htmlFor="uploadFile">Upload Digital product</label>
+        </div>
+      );
+    }
     return null;
   }
 
@@ -176,6 +246,10 @@ class ProductDetail extends Component {
                     placeholder: "Description"
                   }}
                 />
+
+                {this.renderInputToggle()}
+
+                {this.renderDigitalDetails()}
               </div>
 
               <div className="options-add-to-cart">
@@ -186,6 +260,7 @@ class ProductDetail extends Component {
                 <AlertContainer placement="productDetail" />
                 <AddToCartButton
                   cartQuantity={this.props.cartQuantity}
+                  inputType={this.state.cartQuantity}
                   onCartQuantityChange={this.props.onCartQuantityChange}
                   onClick={this.props.onAddToCart}
                 />
@@ -200,8 +275,10 @@ class ProductDetail extends Component {
 
 ProductDetail.propTypes = {
   cartQuantity: PropTypes.number,
+  changeParentIsDigitalState: PropTypes.func,
   editable: PropTypes.bool,
   hasAdminPermission: PropTypes.bool,
+  isDigital: PropTypes.bool,
   mediaGalleryComponent: PropTypes.node,
   onAddToCart: PropTypes.func,
   onCartQuantityChange: PropTypes.func,
