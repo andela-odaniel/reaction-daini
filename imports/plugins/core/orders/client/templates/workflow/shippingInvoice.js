@@ -118,34 +118,24 @@ Template.coreOrderShippingInvoice.events({
     const paymentMethod = order.billing[0].paymentMethod;
     const discounts = order.billing[0].invoice.discounts;
     const refund = state.get("field-refund") || 0;
-    const refunds = Template.instance().refunds.get();
-    let refundTotal = 0;
-    _.each(refunds, function (item) {
-      refundTotal += parseFloat(item.amount);
-    });
-    let adjustedTotal;
 
-    // Stripe counts discounts as refunds, so we need to re-add the discount to not "double discount" in the adjustedTotal
-    if (paymentMethod.processor === "Stripe") {
-      adjustedTotal = accounting.toFixed(orderTotal + discounts - refundTotal, 2);
-    } else {
-      adjustedTotal = accounting.toFixed(orderTotal - refundTotal, 2);
-    }
-
-    if (refund > adjustedTotal) {
-      Alerts.inline("Refund(s) total cannot be greater than adjusted total", "error", {
+    console.log(refund);
+    console.log(orderTotal);
+    if (refund > orderTotal) {
+      Alerts.inline("Refund(s) total cannot be greater than the Order total", "error", {
         placement: "coreOrderRefund",
         i18nKey: "order.invalidRefund",
         autoHide: 10000
       });
     } else {
+      console.log("attempt refund");
       Alerts.alert({
         title: i18next.t("order.applyRefundToThisOrder", { refund: refund, currencySymbol: currencySymbol }),
         showCancelButton: true,
         confirmButtonText: i18next.t("order.applyRefund")
       }, (isConfirm) => {
         if (isConfirm) {
-          Meteor.call("orders/refunds/create", order._id, paymentMethod, refund, (error) => {
+          Meteor.call("orders/refunds/wallet", Meteor.userId(), refund, (error) => {
             if (error) {
               Alerts.alert(error.reason);
             }
@@ -154,6 +144,42 @@ Template.coreOrderShippingInvoice.events({
         }
       });
     }
+    // const refunds = Template.instance().refunds.get();
+    // let refundTotal = 0;
+    // _.each(refunds, function (item) {
+    //   refundTotal += parseFloat(item.amount);
+    // });
+    // let adjustedTotal;
+
+    // // Stripe counts discounts as refunds, so we need to re-add the discount to not "double discount" in the adjustedTotal
+    // if (paymentMethod.processor === "Stripe") {
+    //   adjustedTotal = accounting.toFixed(orderTotal + discounts - refundTotal, 2);
+    // } else {
+    //   adjustedTotal = accounting.toFixed(orderTotal - refundTotal, 2);
+    // }
+
+    // if (refund > adjustedTotal) {
+    //   Alerts.inline("Refund(s) total cannot be greater than adjusted total", "error", {
+    //     placement: "coreOrderRefund",
+    //     i18nKey: "order.invalidRefund",
+    //     autoHide: 10000
+    //   });
+    // } else {
+    //   Alerts.alert({
+    //     title: i18next.t("order.applyRefundToThisOrder", { refund: refund, currencySymbol: currencySymbol }),
+    //     showCancelButton: true,
+    //     confirmButtonText: i18next.t("order.applyRefund")
+    //   }, (isConfirm) => {
+    //     if (isConfirm) {
+    //       Meteor.call("orders/refunds/create", order._id, paymentMethod, refund, (error) => {
+    //         if (error) {
+    //           Alerts.alert(error.reason);
+    //         }
+    //         state.set("field-refund", 0);
+    //       });
+    //     }
+    //   });
+    // }
   },
 
   "click [data-event-action=makeAdjustments]": (event, instance) => {

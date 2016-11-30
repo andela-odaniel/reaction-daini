@@ -6,7 +6,7 @@ import Future from "fibers/future";
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
 import { getSlug } from "/lib/api";
-import { Cart, Media, Orders, Products, Shops } from "/lib/collections";
+import { Accounts, Cart, Media, Orders, Products, Shops } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
 
@@ -849,6 +849,45 @@ Meteor.methods({
 
       throw new Meteor.Error(
         "Attempt to refund transaction failed", result.error);
+    }
+  },
+
+  /**
+   * orders/refunds/wallet
+   * This method is called to credit the users wallet with a refund
+   * @return {null}
+   */
+  "orders/refunds/wallet": function (userId, refund) {
+    check(userId, String);
+    check(refund, Number);
+    this.unblock();
+    const account = Accounts.find({_id: userId}).fetch();
+
+    console.log(account);
+    console.log(userId);
+
+    const balance = account.wallet === undefined ? refund : account.wallet.balance + refund;
+
+    const transactions = account.wallet === undefined || account.wallet.transactions === undefined ? [] : account.wallet.transactions;
+
+    transactions.push({
+      transactionType: "credit",
+      amount: refund
+    });
+
+    try {
+      Accounts.update(
+        { _id: userId },
+        {
+          $set: {
+            "wallet.balance": balance,
+            "wallet.transactions": transactions
+          }
+        });
+        console.log("success");
+    } catch (error) {
+      console.log(error);
+      return { error: "could not save the refund" };
     }
   },
 

@@ -27,7 +27,9 @@ Router.Hooks = Hooks;
  * @return {Object} return context
  */
 function checkRouterPermissions(context) {
+  console.log(context);
   const routeName = context.route.name;
+  console.log(Reaction.hasPermission(routeName, Meteor.userId()));
 
   if (Reaction.hasPermission(routeName, Meteor.userId())) {
     if (context.unauthorized === true) {
@@ -179,6 +181,15 @@ Router.initPackageRoutes = () => {
       name: "index",
       action() {
         ReactionLayout(Session.get("INDEX_OPTIONS") || {});
+      }
+    });
+
+    shop.route("/wallet", {
+      name: "wallet",
+      action() {
+        ReactionLayout({
+          template: "userwallet"
+        });
       }
     });
 
