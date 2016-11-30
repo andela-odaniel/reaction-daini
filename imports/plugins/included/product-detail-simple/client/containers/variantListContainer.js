@@ -68,17 +68,37 @@ function getTopVariants() {
   return [];
 }
 
+
 function isSoldOut(variant) {
   return ReactionProduct.getVariantQuantity(variant) < 1;
 }
 
 class VariantListContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    // this.state = {
+    //   isDigital: 
+    // };
+
+
+    this.state = {
+      isDigital: true
+    };
+  }
   componentWillReceiveProps() {
     this.setState({});
   }
 
   get variants() {
     return (this.state && this.state.variants) || this.props.variants;
+  }
+  get products() {
+    return this.props.product;
+  }
+
+  get isDigital() {
+    return this.props.isDigital;
   }
 
   handleVariantClick = (event, variant, ancestors = -1) => {
@@ -154,6 +174,7 @@ class VariantListContainer extends Component {
     });
   }
 
+
   render() {
     return (
       <DragDropProvider>
@@ -162,7 +183,9 @@ class VariantListContainer extends Component {
           onMoveVariant={this.handleMoveVariant}
           onVariantClick={this.handleVariantClick}
           onVariantVisibiltyToggle={this.handleVariantVisibilityToggle}
+          isDigital={this.isDigital}
           {...this.props}
+          products={this.products}
           variants={this.variants}
         />
       </DragDropProvider>
@@ -187,7 +210,7 @@ function composer(props, onData) {
   }
 
   let editable;
-
+  let products = props.product;
   if (Reaction.Router.getQueryParam("as") === "customer") {
     editable = false;
   } else {
@@ -197,6 +220,7 @@ function composer(props, onData) {
   onData(null, {
     variants: getTopVariants(),
     variantIsSelected,
+    products,
     variantIsInActionView,
     childVariants,
     childVariantMedia,
@@ -207,6 +231,8 @@ function composer(props, onData) {
 }
 
 VariantListContainer.propTypes = {
+  isDigital: PropTypes.any,
+  product: PropTypes.object,
   variants: PropTypes.arrayOf(PropTypes.object)
 };
 

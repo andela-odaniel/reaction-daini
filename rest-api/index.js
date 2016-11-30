@@ -15,8 +15,10 @@ import { CreateTagsRoute } from "./collections/tags";
 import { CreateTemplatesRoute } from "./collections/templates";
 import { CreateThemesRoute } from "./collections/themes";
 import { CreateTranslationsRoute } from "./collections/translations";
+import { Meteor } from "meteor/meteor";
 
 
+if (Meteor.isServer) {
 const Api = new Restivus({
   useDefaultAuth: true,
   prettyJson: true
@@ -41,5 +43,5 @@ export default function () {
   CreateThemesRoute(Api);
   CreateTranslationsRoute(Api);
 }
-
+}
 

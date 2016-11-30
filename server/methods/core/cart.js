@@ -289,9 +289,10 @@ Meteor.methods({
    *  @param {Number} [itemQty] - qty to add to cart
    *  @return {Number|Object} Mongo insert response
    */
-  "cart/addToCart": function (productId, variantId, itemQty) {
+  "cart/addToCart": function (productId, variantId, itemQty, isDigital) {
     check(productId, String);
     check(variantId, String);
+    check(isDigital, Boolean);
     check(itemQty, Match.Optional(Number));
 
     const cart = Collections.Cart.findOne({ userId: this.userId });
@@ -370,6 +371,7 @@ Meteor.methods({
       _id: cart._id
     }, {
       $addToSet: {
+        isDigital: isDigital,
         items: {
           _id: Random.id(),
           shopId: product.shopId,
