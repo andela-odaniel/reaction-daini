@@ -1,3 +1,7 @@
 .introjs-helperNumberLayer {
     display: none;
 }
+
+.introjs-helperLayer{
+    background-color: rgba(-5, -5, 1, 0.3) !important;
+}

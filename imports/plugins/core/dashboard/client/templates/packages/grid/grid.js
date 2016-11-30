@@ -97,18 +97,6 @@ Template.packagesGrid.helpers({
     return Template.instance().state.get("groups");
   },
 
-  messages() {
-    const introMessages = [
-      "This is your core settings",
-      "Below is your utilities settings",
-      "Followed next when you scroll is your appearance settings",
-      "Scroll next is your connect settings",
-      "And finally your payment method settings"
-    ];
-
-    return introMessages;
-  },
-
   appsInGroup(groupName) {
     const group = Template.instance().state.get("appsByGroup") || {};
     return group[groupName] || false;
@@ -137,12 +125,4 @@ Template.packagesGridGroup.helpers({
       }
     };
   }
-});
-
-Template.registerHelper("groupIndex", function (i) {
-  return i + 14;
-});
-
-Template.registerHelper("introMsg", function (msg, i) {
-  return msg[i];
 });

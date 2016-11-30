@@ -41,7 +41,7 @@ Template.coreAdminLayout.helpers({
           tooltip: shortcuts[i].label || "",
           i18nKeyTooltip: shortcuts[i].i18nKeyLabel,
           tooltipPosition: "left middle",
-          "data-step": i+1,
+          "data-step": i+7,
           "data-intro": introMessages[i],
         });
       }

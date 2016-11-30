@@ -13,11 +13,6 @@ Template.dashboardHeader.helpers({
       return Reaction.translateRegistry(registry);
     }
   },
-
-  labelIs (label) {
-    const registry = Reaction.getRegistryForCurrentRoute() || {};
-    return registry.label === label;
-  }
 });
 
 //

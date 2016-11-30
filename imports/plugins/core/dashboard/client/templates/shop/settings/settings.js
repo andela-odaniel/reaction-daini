@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { Reaction, i18next } from "/client/api";
-import { Media, Packages, Shops } from "/lib/collections";
+import { Media, Packages, Shops, Accounts } from "/lib/collections";
 
 Template.shopBrandImageOption.helpers({
   cardProps(data) {
@@ -228,3 +228,27 @@ AutoForm.hooks({
     }
   }
 });
+
+Template.shopSettings.events({
+  'mouseenter .shopSettings'(){
+
+    const currentUser = Accounts.findOne(Meteor.userId());
+    const myintro = introJs("#shopSettingsAccordian");
+
+    if(Meteor.user().emails.length > 0 && !currentUser.shopSettingsTour){
+      myintro.start();
+    }
+
+    myintro.oncomplete(function() { 
+      Accounts.update({_id: Meteor.userId()}, {$set:{shopSettingsTour: true}}, function (error, res) {
+      });
+        
+      });
+  },
+
+  'mouseleave .shopSettings'(){
+     const myintro = introJs("#shopSettingsAccordian");
+     myintro.exit();
+  },
+
+})

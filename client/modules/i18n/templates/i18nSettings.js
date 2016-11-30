@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import { Countries } from "/client/collections";
 import { Reaction } from "/client/api";
-import { Shops } from "/lib/collections";
+import { Shops, Accounts } from "/lib/collections";
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
 
@@ -100,3 +100,27 @@ AutoForm.hooks({
     }
   }
 });
+
+Template.i18nSettings.events({
+  'mouseenter .i18nSettings'(){
+
+    const currentUser = Accounts.findOne(Meteor.userId());
+    const myintro = introJs("#internalization-settings");
+
+    if(Meteor.user().emails.length > 0 && !currentUser.i18nSettingsTour){
+      myintro.start();
+    }
+
+    myintro.oncomplete(function() { 
+      Accounts.update({_id: Meteor.userId()}, {$set:{i18nSettingsTour: true}}, function (error, res) {
+      });
+        
+      });
+  },
+
+  'mouseleave .i18nSettings'(){
+     const myintro = introJs("#internalization-settings");
+     myintro.exit();
+  },
+
+})
