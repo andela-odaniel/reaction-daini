@@ -181,15 +181,14 @@ Router.initPackageRoutes = () => {
         ReactionLayout(Session.get("INDEX_OPTIONS") || {});
       }
     });
-    
+
     /**
-     * Uses RC defined method of routing passing params 
+     * Uses RC defined method of routing passing params
      * of each generated page route, as data to the pageView
      * template to be used by the template helper as an
-     * arguement to determine which page to render. 
+     * arguement to determine which page to render.
      */
     shop.route("/pages/:pageRoute/", {
-      
       action(params) {
         ReactionLayout({
           template: "pageView",

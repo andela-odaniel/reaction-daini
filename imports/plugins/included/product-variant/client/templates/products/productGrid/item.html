@@ -4,13 +4,13 @@
     <span class="product-grid-item-alerts">
       {{> inlineAlerts placement="productGridItem" id=_id}}
     </span>
-
     <a class="product-grid-item-images"
       href="{{pdpPath}}"
       data-event-category="grid"
       data-event-action="productClick"
       data-event-label="grid product click"
-      data-event-value="{{_id}}">
+      data-event-value="{{_id}}"
+      data-event-analytics="analytics">
 
       <div class="product-primary-images">
         {{#with media}}

@@ -5,7 +5,6 @@ import { Template } from "meteor/templating";
 import { Reaction, i18next } from "/client/api";
 import { Packages } from "/lib/collections";
 
-
 Template.coreAdminLayout.onRendered(function () {
   $("body").addClass("admin");
 });
@@ -24,28 +23,39 @@ Template.coreAdminLayout.helpers({
     });
 
     const items = [];
-
     const introMessages = [
-      'This is your dashboard. You can visit your dashboard to know a few of your controls',
-      'This is the orders page. You can view your orders here',
-      'This is your accounts page. You can view your account information here',
-      ]
+      "This is your dashboard. You can visit your dashboard to know a few of your controls",
+      "This is the orders page. You can view your orders here",
+      "This is your accounts page. You can view your account information here"
+    ];
 
     if (_.isArray(shortcuts)) {
       for (let i = 0; i < shortcuts.length; i++) {
         items.push({
-          type: "link",
-          href: Reaction.Router.pathFor(shortcuts[i].name),
-          className: Reaction.Router.isActiveClassName(shortcuts[i].name),
-          icon: shortcuts[i].icon,
-          tooltip: shortcuts[i].label || "",
-          i18nKeyTooltip: shortcuts[i].i18nKeyLabel,
-          tooltipPosition: "left middle",
-          "data-step": i+1,
-          "data-intro": introMessages[i],
+          "type": "link",
+          "href": Reaction.Router.pathFor(shortcuts[i].name),
+          "className": Reaction.Router.isActiveClassName(shortcuts[i].name),
+          "icon": shortcuts[i].icon,
+          "tooltip": shortcuts[i].label || "",
+          "i18nKeyTooltip": shortcuts[i].i18nKeyLabel,
+          "tooltipPosition": "left middle",
+          "data-step": i + 1,
+          "data-intro": introMessages[i]
         });
       }
     }
+
+    /*items.push({
+      "type": "link",
+      "href": Reaction.Router.pathFor("analytics"),
+      "className": Reaction.Router.isActiveClassName("analytics"),
+      "icon": "fa fa-line-chart",
+      "tooltip": "analytics" || "",
+      "i18nKeyTooltip": "analytics",
+      "tooltipPosition": "left middle",
+      "data-step": 4 + 1,
+      "data-intro": "view products analytics data here"
+    });*/
 
     items.push({
       type: "seperator"
@@ -93,7 +103,6 @@ Template.coreAdminLayout.helpers({
       for (const item of registryItems) {
         if (Reaction.hasPermission(item.route, Meteor.userId())) {
           let icon = item.icon;
-
           if (!item.icon && item.provides === "settings") {
             icon = "gear";
           }
@@ -151,37 +160,3 @@ Template.coreAdminLayout.helpers({
     return reactionApp;
   }
 });
-
-// Template.coreAdminLayout.events({
-//   /**
-//    * Submit sign up form
-//    * @param  {Event} event - jQuery Event
-//    * @param  {Template} template - Blaze Template
-//    * @return {void}
-//    */
-//   "click .admin-controls-quicklinks a, click .admin-controls-quicklinks button"(event) {
-//     if (this.name === "createProduct") {
-//       event.preventDefault();
-//       event.stopPropagation();
-//
-//       if (!this.dropInstance) {
-//         this.dropInstance = new Drop({
-//           target: event.target,
-//           content: "",
-//           constrainToWindow: true,
-//           classes: "drop-theme-arrows",
-//           position: "right center"
-//         });
-//
-//         Blaze.renderWithData(Template.createContentMenu, {}, this.dropInstance.content);
-//       }
-//
-//       this.dropInstance.open();
-//     } else if (this.route) {
-//       event.preventDefault();
-//       event.stopPropagation();
-//
-//       Reaction.Router.go(this.name);
-//     }
-//   }
-// });

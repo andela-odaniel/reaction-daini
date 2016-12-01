@@ -12,9 +12,11 @@ Template.dashboardHeader.helpers({
     if (registry && route) {
       return Reaction.translateRegistry(registry);
     }
+    // @TODO return appropriate default value here.
+    return {};
   },
 
-  labelIs (label) {
+  labelIs(label) {
     const registry = Reaction.getRegistryForCurrentRoute() || {};
     return registry.label === label;
   }

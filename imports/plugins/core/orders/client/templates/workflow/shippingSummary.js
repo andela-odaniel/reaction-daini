@@ -3,7 +3,6 @@ import { Meteor } from "meteor/meteor";
 import { Reaction } from "/client/api";
 import { ReactiveDict } from "meteor/reactive-dict";
 import { Tracker } from "meteor/tracker";
-import { Accounts } from '/lib/collections';
 import { Template } from "meteor/templating";
 import { i18next } from "/client/api";
 import { Orders } from "/lib/collections";
@@ -29,7 +28,6 @@ Template.coreOrderShippingSummary.onCreated(() => {
 /*
  * automatically start order processing on first view
  */
-
 Template.coreOrderShippingSummary.onRendered(function () {
   const template = Template.instance();
   const order = template.order;
@@ -155,7 +153,7 @@ Template.orderCancelButton.events({
     }
   },
   "click .complete": function () {
-    //@TODO check status to make sure order is shipped
+    // @TODO check status to make sure order is shipped
     Meteor.call("orders/complete", this, this.shipping[0]);
   },
   "click .toggle-options": function () {

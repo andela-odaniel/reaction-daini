@@ -1,0 +1,24 @@
+// Test analytics dataset will look like the following
+[
+   {
+      category: "Digital products",
+      productId: "123456855",
+      action: bought,
+      userId: "3465565456",
+      date: Date.then()
+   },
+   {
+      category: "Digital products",
+      productId: "123456855",
+      action: "carted",
+      userId: "3465565456",
+      date: Date.then()
+   },
+   {
+      category: "Digital products",
+      productId: "123456855",
+      action: "viewed",
+      userId: "3465565456",
+      date: Date.then()
+   },
+]

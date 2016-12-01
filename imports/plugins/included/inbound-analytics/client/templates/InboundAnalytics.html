@@ -1,0 +1,48 @@
+<template name="InboundAnalytics">
+    <div class="col-xs-12 row" style="padding-top:1em">
+        <div class="col-sm-4">
+            <div class="col-xs-12" style="padding:.3em 0">
+                <div class="input-group col-xs-12">
+                    <input type="text" class="form-control" placeholder="Search for a product" aria-describedby="basic-addon2">
+                    <span class="input-group-addon" id="basic-addon2">
+                        <i class="icon fa fa-search"></i>
+                    </span>
+                </div>
+                <div class="alert alert-info col-xs-12" style="margin-top:1em">
+                    Curently showing stats for all products. You can enter the product id to see
+                    peformance over time for that particular product.
+                </div>
+            </div>
+            <div class="col-xs-12" style="height:30em;background-color:#fefefe">
+                <div id="piechart" style="width:100%; height:600px; padding:0 1em"></div>
+            </div>
+            <div class="col-xs-12" style="height:20em;background-color:#efefef;padding:0">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td>Sales</td>
+                            <td>304</td>
+                        </tr>
+                        <tr>
+                            <td>views</td>
+                            <td>4000</td>
+                        </tr>
+                        <tr>
+                            <td>In-Cart</td>
+                            <td>76</td>
+                        </tr>
+                    </tbody>
+                     <tfoot>
+                        <tr>
+                            <td>Total Conversion</td>
+                            <td>22%</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-8" style="padding:1em; background-color:#fff">
+            <div id="linechart" style="width:100%; height: 500px; padding:0 1em"></div>
+        </div>
+    </div>
+</template>

@@ -200,5 +200,16 @@ Template.productGridItems.events({
       }
     });
     return Tracker.flush();
+  },
+  "click [data-event-analytics=analytics]": function () {
+    const data = {
+      brand: this.brand,
+      productId: this._id,
+      userId: Meteor.userId(),
+      action: "view",
+      createdAt: "" /* THIS DATA WILL BE UPDATED ON THE SERVER SIDE*/
+    };
+
+    Meteor.call("inbound-analytics/capture", data);
   }
 });
