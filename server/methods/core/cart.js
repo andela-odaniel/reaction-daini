@@ -295,6 +295,7 @@ Meteor.methods({
     check(isDigital, Boolean);
     check(itemQty, Match.Optional(Number));
 
+    console.log(isDigital, "add to cart");
     const cart = Collections.Cart.findOne({ userId: this.userId });
     if (!cart) {
       Logger.error(`Cart not found for user: ${ this.userId }`);
@@ -338,10 +339,14 @@ Meteor.methods({
       .some(item => item.variants._id === variantId);
 
     if (cartVariantExists) {
+      console.log("car variant exists");
       return Collections.Cart.update({
         "_id": cart._id,
         "items.variants._id": variantId
       }, {
+        $addToSet: {
+          "isDigital": isDigital
+        },
         $inc: {
           "items.$.quantity": quantity
         }
@@ -366,6 +371,7 @@ Meteor.methods({
       });
     }
 
+    console.log("cart variant does not exist");
     // cart variant doesn't exist
     return Collections.Cart.update({
       _id: cart._id
@@ -493,11 +499,17 @@ Meteor.methods({
    * @todo:  Partial order processing, shopId processing
    * @todo:  Review Security on this method
    * @param {String} cartId - cartId to transform to order
+   * @param {Boolean} isDigital- isDigital for checking for digital product
    * @return {String} returns orderId
    */
   "cart/copyCartToOrder": function (cartId) {
     check(cartId, String);
+
     const cart = Collections.Cart.findOne(cartId);
+    const productId = cart.items[0].productId;
+
+    const product = Collections.Products.findOne(productId);
+    console.log(product.productType, "copy to cart");
     // security check
     if (cart.userId !== this.userId) {
       throw new Meteor.Error(403, "Access Denied");
@@ -594,13 +606,23 @@ Meteor.methods({
       Logger.error(msg);
       throw new Meteor.Error("no-cart-items", msg);
     }
+    let orderId = {};
 
+    if (product.productType) {
+      order.workflow.status = "coreOrderWorkflow/completed";
+      order.workflow.workflow = ["coreOrderWorkflow/created", "coreOrderWorkflow/processing", "coreOrderWorkflow/completed"];
+      order.items[0].workflow.workflow = ["coreOrderItemWorkflow/packed", "coreOrderItemWorkflow/completed"];
+      // insert new reaction order
+      orderId = Collections.Orders.insert(order);
+    } else {
+      order.workflow.status = "new";
+      order.workflow.workflow = ["coreOrderWorkflow/created"];
+
+      // insert new reaction order
+      orderId = Collections.Orders.insert(order);
+    }
     // set new workflow status
-    order.workflow.status = "new";
-    order.workflow.workflow = ["coreOrderWorkflow/created"];
 
-    // insert new reaction order
-    const orderId = Collections.Orders.insert(order);
     Logger.info("Created orderId", orderId);
 
     if (orderId) {

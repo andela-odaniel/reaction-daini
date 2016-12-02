@@ -47,6 +47,7 @@ Template.coreOrderShippingTracking.events({
 
   "click [data-event-action=resendNotification]": function () {
     const template = Template.instance();
+    console.log(template.order);
     Meteor.call("orders/sendNotification", template.order, (err) => {
       if (err) {
         Alerts.toast("Server Error: Can't send email notification.", "error");

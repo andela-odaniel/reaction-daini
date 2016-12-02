@@ -16,9 +16,11 @@ import {
   ProductTags,
   ProductField
 } from "./";
+import { Reaction } from "/client/api";
 import { AlertContainer } from "/imports/plugins/core/ui/client/containers";
 import { PublishContainer } from "/imports/plugins/core/revisions";
 import "./inputToggle.css";
+import { Audio, Video, Software, Book } from "/lib/collections";
 
 
 class ProductDetail extends Component {
@@ -26,10 +28,16 @@ class ProductDetail extends Component {
     super(props);
     this.state = {
       digital: this.props.isDigital,
-      cartQuantity: "number"
+      cartQuantity: "number",
+      categoryValue: "",
+      downloadUrl: "",
+      fileId: this.props.product.productFileId
     };
 
     this.switchDigital = this.switchDigital.bind(this);
+    this.handleCategoryStateChange = this.handleCategoryStateChange.bind(this);
+    this.handleUploadClick = this.handleUploadClick.bind(this);
+    this.deleteFile = this.deleteFile.bind(this);
   }
 
   get tags() {
@@ -118,6 +126,88 @@ class ProductDetail extends Component {
     return null;
   }
 
+  handleCategoryStateChange(e) {
+    const value = e.target.value;
+    this.setState({"categoryValue": value});
+  }
+
+  handleUploadClick(e) {
+    const files = new FS.File(e.target.files[0]);
+    files.metadata = {
+      productId: this.props.product._id,
+      ownerId: Meteor.userId(),
+      shopId: Reaction.getShopId()
+    };
+    if (this.state.categoryValue === "audio") {
+      Audio.insert(files, (err, file) => {
+        if (err) {
+          return Alerts.toast("Something went wrong", "warning");
+        }
+        if (file) {
+          this.setState({"fileId": file._id});
+          const digitalInfo = {
+            fileId: file._id,
+            category: this.state.categoryValue
+          };
+          this.props.onProductFieldChange(this.props.product._id, "productFileId", file._id);
+          this.props.onProductFieldChange(this.props.product._id, "digitalInfo", digitalInfo);
+          return Alerts.toast("File successfully uploaded", "success");
+        }
+      });
+      return true;
+    }
+
+    if (this.state.categoryValue === "video") {
+      Video.insert(files, (err, file) => {
+        if (err) return err;
+        this.setState({"fileId": file._id});
+        Meteor.call("products/updateFileId", file._id, this.props.product._id, (error, result) => {
+          if (error) return error;
+          return result;
+        });
+      });
+      return true;
+    }
+    if (this.state.categoryValue === "book") {
+      Book.insert(files, (err, file) => {
+        if (err) return err;
+        this.setState({"fileId": file._id});
+        Meteor.call("products/updateFileId", file._id, this.props.product._id, (error, result) => {
+          if (error) return error;
+          return result;
+        });
+      });
+      return true;
+    }
+    if (this.state.categoryValue === "software") {
+      Software.insert(files, (err, file) => {
+        if (err) return err;
+        this.setState({"fileId": file._id});
+        Meteor.call("products/updateFileId", file._id, this.props.product._id, (error, result) => {
+          if (error) return error;
+          return result;
+        });
+      });
+      return true;
+    }
+
+    return true;
+  }
+
+  get download() {
+    const result = Audio.findOne({_id: this.state.fileId});
+    return (new FS.File(result).url());
+  }
+
+  deleteFile() {
+    if (this.state.fileId) {
+      return (
+        <button className="btn btn-danger no-round">Delete Uploaded File</button>
+      );
+    }
+    return null;
+  }
+
   renderDigitalDetails() {
     if (this.props.hasAdminPermission && this.state.digital) {
       return (
@@ -128,7 +218,8 @@ class ProductDetail extends Component {
           <FieldGroup
             componentClass="select"
             name="digitalCategory"
-            onChange={this.handleStateChange}>
+            onChange={this.handleCategoryStateChange}
+          >
             <option value="">Choose a category..</option>
             <option value="audio">Audio</option>
             <option value="book">Book</option>
@@ -136,8 +227,9 @@ class ProductDetail extends Component {
             <option value="software">Software</option>
           </FieldGroup>
 
-          <input className="btn btn-success hidden" type="file" id="uploadFile"/>
+          <input className="btn btn-success hidden" type="file" id="uploadFile" onChange={this.handleUploadClick}/>
           <label className="btn btn-success no-round" htmlFor="uploadFile">Upload Digital product</label>
+          {this.deleteFile()}
         </div>
       );
     }

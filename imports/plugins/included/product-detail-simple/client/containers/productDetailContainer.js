@@ -75,8 +75,8 @@ class ProductDetailContainer extends Component {
         });
       } else {
         productId = currentProduct._id;
-        const isDigital = this.isDigital;
-        console.log(isDigital);
+        const isDigital = currentProduct.productType;
+        console.log(isDigital, "before adding to cart");
         if (productId) {
           Meteor.call("cart/addToCart", productId, currentVariant._id, quantity, isDigital, (error) => {
             if (error) {
