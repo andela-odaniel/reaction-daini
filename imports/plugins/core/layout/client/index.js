@@ -20,5 +20,8 @@ import "./templates/layout/staticpages/pageView.html";
 import "./templates/layout/staticpages/pageView.js";
 import "./templates/layout/layout.html";
 
+import "./templates/layout/wallet/wallet.html";
+import "./templates/layout/wallet/wallet.js";
+
 import "./templates/theme/theme.html";
 import "./templates/theme/theme.js";

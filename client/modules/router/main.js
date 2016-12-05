@@ -27,7 +27,9 @@ Router.Hooks = Hooks;
  * @return {Object} return context
  */
 function checkRouterPermissions(context) {
+  console.log(context);
   const routeName = context.route.name;
+  console.log(Reaction.hasPermission(routeName, Meteor.userId()));
 
   if (Reaction.hasPermission(routeName, Meteor.userId())) {
     if (context.unauthorized === true) {
@@ -208,6 +210,15 @@ Router.initPackageRoutes = () => {
           template: "notifications"
         });
     }});
+
+    shop.route("/wallet", {
+      name: "wallet",
+      action() {
+        ReactionLayout({
+          template: "userwallet"
+        });
+      }
+    });
 
     // get package registry route configurations
     for (const pkg of pkgs) {

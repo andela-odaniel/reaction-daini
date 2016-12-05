@@ -6,7 +6,7 @@ import Future from "fibers/future";
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
 import { getSlug } from "/lib/api";
-import { Cart, Media, Orders, Products, Shops } from "/lib/collections";
+import { Accounts, Cart, Media, Orders, Products, Shops } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
 
@@ -146,10 +146,9 @@ Meteor.methods({
 
     // Server-side check to make sure discount is not greater than orderTotal.
     const orderTotal = accounting.toFixed(
-      order.billing[0].invoice.subtotal
-      + order.billing[0].invoice.shipping
-      + order.billing[0].invoice.taxes
-      , 2);
+      order.billing[0].invoice.subtotal +
+      order.billing[0].invoice.shipping +
+      order.billing[0].invoice.taxes, 2);
 
 
     if (discount > orderTotal) {
@@ -161,10 +160,10 @@ Meteor.methods({
     this.unblock();
 
     const total =
-      order.billing[0].invoice.subtotal
-      + order.billing[0].invoice.shipping
-      + order.billing[0].invoice.taxes
-      - Math.abs(discount);
+      order.billing[0].invoice.subtotal +
+      order.billing[0].invoice.shipping +
+      order.billing[0].invoice.taxes -
+      Math.abs(discount);
 
     return Orders.update(order._id, {
       $set: {
@@ -204,7 +203,6 @@ Meteor.methods({
         });
 
         Meteor.call("workflow/pushItemWorkflow", "coreOrderItemWorkflow/captured", order, itemIds);
-
 
         return this.processPayment(order);
       }
@@ -426,7 +424,7 @@ Meteor.methods({
       from: `${shop.name} <${shop.emails[0].address}>`,
       subject: "Your order is confirmed",
       // subject: `Order update from ${shop.name}`,
-      html: SSR.render(tpl,  dataForOrderEmail)
+      html: SSR.render(tpl, dataForOrderEmail)
     });
 
     return true;
@@ -600,16 +598,16 @@ Meteor.methods({
     check(cartId, String);
     check(email, String);
     /**
-    *Instead of checking the Orders permission, we should check if user is
-    *connected.This is only needed for guest where email is
-    *provided for tracking order progress.
-    */
+     *Instead of checking the Orders permission, we should check if user is
+     *connected.This is only needed for guest where email is
+     *provided for tracking order progress.
+     */
 
     if (!Meteor.userId()) {
       throw new Meteor.Error(403, "Access Denied. You are not connected.");
     }
 
-    return Orders.update({cartId: cartId}, {
+    return Orders.update({ cartId: cartId }, {
       $set: {
         email: email
       }
@@ -765,7 +763,7 @@ Meteor.methods({
               }
             });
 
-            return {error: "orders/capturePayments: Failed to capture transaction"};
+            return { error: "orders/capturePayments: Failed to capture transaction" };
           }
         });
       }
@@ -843,7 +841,39 @@ Meteor.methods({
   },
 
   /**
-   * orders/cancel
+   * orders/refunds/wallet
+   * This method is called to credit the users wallet with a refund
+   * @return {null}
+   */
+  "orders/refunds/wallet": function (userId, refund) {
+    check(userId, String);
+    check(refund, Number);
+    this.unblock();
+    const account = Accounts.find({ _id: userId }).fetch();
+
+    const balance = account.wallet === undefined ? refund : account.wallet.balance + refund;
+
+    const transactions = account.wallet === undefined || account.wallet.transactions === undefined ? [] : account.wallet.transactions;
+
+    transactions.push({
+      transactionType: "credit",
+      amount: refund
+    });
+
+    try {
+      Accounts.update({ _id: userId }, {
+        $set: {
+          "wallet.balance": balance,
+          "wallet.transactions": transactions
+        }
+      });
+    } catch (error) {
+      return { error: "could not save the refund" };
+    }
+  },
+
+  /**
+   * orders/delete
    * This method is called when an order is to be deleted
    * @return {null}
    */
@@ -869,7 +899,7 @@ Meteor.methods({
       }
     });
   },
-   /**
+  /**
    * orders/complete
    * This method is called when an order is to be completed
    * @return {null}
@@ -891,5 +921,3 @@ Meteor.methods({
     }
   }
 });
-
-

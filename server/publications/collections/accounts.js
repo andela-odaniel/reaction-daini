@@ -105,3 +105,7 @@ Meteor.publish("UserProfile", function (profileUserId) {
     fields: fields
   });
 });
+
+Meteor.publish("LoggedInUserAccount", function () {
+  return Meteor.users.find({ _id: this.userId });
+});

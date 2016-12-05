@@ -442,5 +442,91 @@ Meteor.methods({
       Logger.error(error);
       return error;
     }
+  },
+  /**
+   * accounts/createWalletTransaction
+   * @param {String} recipientEmail - recipient
+   * @param {Number} amount - amount
+   * @returns {Object} returns an object containing the result and error
+   */
+  "accounts/walletTransfer": function (recipientEmail, amount) {
+    check(recipientEmail, String);
+    check(amount, Number);
+
+    if (amount <= 0) {
+      return false;
+    }
+
+    const userAccount = Collections.Accounts.findOne(Meteor.userId());
+
+    if (amount > userAccount.wallet.balance) {
+      return false;
+    }
+
+    const senderTransaction = {
+      transactionType: "debit",
+      amount: amount
+    };
+
+    const recipientTransaction = {
+      transactionType: "credit",
+      amount: amount
+    };
+
+    Collections.Accounts.update(
+      { _id: Meteor.userId() },
+      {
+        $inc: {
+          "wallet.balance" : -amount
+        },
+        $push: {
+          "wallet.transactions": senderTransaction
+        }
+      });
+
+    return Collections.Accounts.update(
+      { "emails.0.address": recipientEmail },
+      {
+        $inc: {
+          "wallet.balance" : amount
+        },
+        $push: {
+          "wallet.transactions": recipientTransaction
+        }
+      });
+  },
+  /**
+   * accounts/createWalletTransaction
+   * @param {Number} amount - amount
+   * @param {String} transactionType - type of transaction (credit or debit)
+   * @returns {Object} returns an object containing the result and error
+   */
+  "account/createWalletTransaction": function (transactionAmount, transactionType) {
+    check(transactionAmount, Number);
+    check(transactionType, String);
+
+    const amount = transactionType === "credit" ? transactionAmount : 0 - transactionAmount;
+
+    const userAccount = Collections.Accounts.findOne(Meteor.userId());
+
+    if (transactionAmount <= 0 || userAccount.wallet.balance < transactionAmount && transactionType === "debit") {
+      return false;
+    }
+
+    const transaction = {
+      transactionType: transactionType,
+      amount: transactionAmount
+    };
+
+    return Collections.Accounts.update(
+      { _id: Meteor.userId() },
+      {
+        $inc: {
+          "wallet.balance" : amount
+        },
+        $push: {
+          "wallet.transactions": transaction
+        }
+      });
   }
 });
